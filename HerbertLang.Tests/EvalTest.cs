@@ -187,9 +187,9 @@ f(ss, rr)";
         [Fact]
         public void EvalProgram_7() {
             var h = @"
-            z:sss
-            f(A):lA
-            f(z)rr";
+z:sss
+f(A):lA
+f(z)rr";
 
             var tokens = Lexer.tokenize(h);
             var parser = new Parser(tokens);
@@ -201,9 +201,9 @@ f(ss, rr)";
         [Fact]
         public void EvalProgram_8() {
             var h = @"
-            z:sss
-            f(A):lA
-            f(ss)r";
+z:sss
+f(A):lA
+f(ss)r";
 
             var tokens = Lexer.tokenize(h);
             var parser = new Parser(tokens);

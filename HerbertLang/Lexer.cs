@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace HerberLanguage {
-    
+
     public struct Token
     {
         public string content;
@@ -23,9 +23,9 @@ namespace HerberLanguage {
             return string.Format("<Token: {0}, '{1}', {2}:{3}>", content, type, line, column);
         }
     }
-    
+
     public static class Lexer {
-        
+
         static Dictionary<string, Regex> rules = new Dictionary<string, Regex>() {
             {"NEW_LINE", new Regex(@"^\n")},
             {":", new Regex(@"^\:")},
