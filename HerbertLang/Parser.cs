@@ -4,17 +4,23 @@ using System.Text;
 
 
 namespace HerberLanguage {
-    public class Parser  {
+    public class Parser {
 
-        public List<Token> tokens;
-        public int position;
+        public static string parse(List<Token> tokens) {
+            var parser = new Parser(tokens);
+            var program = parser.parseProgram() as Program;
+            return program.compile();
+        }
+
+        List<Token> tokens;
+        int position;
 
         public Parser(List<Token> tokens) {
             this.tokens = tokens;
             this.position = 0;
         }
 
-        Token? peek(int ahead=0) {
+        Token? peek(int ahead = 0) {
             if (position + ahead < tokens.Count) {
                 return tokens[position + ahead];
             }
@@ -33,7 +39,7 @@ namespace HerberLanguage {
                 if (!peek(i).HasValue) {
                     return false;
                 }
-                if (peek(i).Value.type == until){
+                if (peek(i).Value.type == until) {
                     return false;
                 }
                 if (peek(i).Value.type == type) {
@@ -48,7 +54,7 @@ namespace HerberLanguage {
                 var prevToken = tokens[position - 1];
                 var msg = string.Format("Expected '{0}'", type);
 
-                throw new LanguageError(msg , prevToken.line, prevToken.column);
+                throw new LanguageError(msg, prevToken.line, prevToken.column);
             }
             var token = tokens[position];
             if (token.type != type) {
@@ -73,7 +79,7 @@ namespace HerberLanguage {
 
                 consume("(");
 
-                while(peek().HasValue && peek().Value.type == "PARAMETER") {
+                while (peek().HasValue && peek().Value.type == "PARAMETER") {
                     var parameterToken = peek().Value;
                     var parameter = new FunctionParameter(parameterToken);
 
@@ -108,12 +114,12 @@ namespace HerberLanguage {
             Next start = null;
 
             do {
-                while(t.HasValue && t.Value.type == "NEW_LINE") {
+                while (t.HasValue && t.Value.type == "NEW_LINE") {
                     consume("NEW_LINE");
                     t = peek();
                 }
 
-                bool isDefinitionLine = look(":", until:"\n");
+                bool isDefinitionLine = look(":", until: "\n");
 
                 if (isDefinitionLine) {
                     var definition = parseFunctionDefinition();
@@ -123,7 +129,7 @@ namespace HerberLanguage {
                     }
                     definitions[t.Value.content] = definition;
                 } else {
-                    if(start == null) {
+                    if (start == null) {
                         start = parseNext();
                     } else {
                         t = peek();
@@ -139,11 +145,11 @@ namespace HerberLanguage {
 
                 t = peek();
 
-            } while(t.HasValue && t.Value.type == "NEW_LINE");
+            } while (t.HasValue && t.Value.type == "NEW_LINE");
 
             return new Program(definitions, start);
         }
-        
+
         public FunctionCall parseFunctionCall() {
             var arguments = new List<INode>();
             bool durabilitySet = false;
@@ -162,15 +168,14 @@ namespace HerberLanguage {
             if (t.HasValue && (
                 t.Value.type == "=" ||
                 t.Value.type == "+" ||
-                t.Value.type == "-"))
-            {
+                t.Value.type == "-")) {
                 if (t.Value.type == "=") {
                     durabilitySet = true;
                     consume("=");
                     var number = parseNumer();
-                    
+
                     durability = number.value;
-                } 
+                }
                 if (t.Value.type == "+") {
                     consume("+");
                     var number = parseNumer();
@@ -186,7 +191,7 @@ namespace HerberLanguage {
             if (t.HasValue && t.Value.type == "(") {
                 consume("(");
 
-                while(peek().HasValue && peek().Value.type != ")") {
+                while (peek().HasValue && peek().Value.type != ")") {
 
                     arguments.Add(parseNext());
 
@@ -202,7 +207,7 @@ namespace HerberLanguage {
             return new FunctionCall(functionToken, arguments,
             durability, durabilitySet);
         }
-        
+
         public Code parseCode() {
 
             List<INode> steps = new List<INode>();
@@ -280,8 +285,8 @@ namespace HerberLanguage {
                 if (t.Value.type == "+") {
                     op = "+";
                     consume("+");
-                    
-                    if(!peek().HasValue) {
+
+                    if (!peek().HasValue) {
                         var msg = string.Format("Some code expected after {0}", t.Value.content);
                         throw new LanguageError(msg, t.Value.line, t.Value.column);
                     }
@@ -293,7 +298,7 @@ namespace HerberLanguage {
                     op = "-";
                     consume("-");
 
-                    if(!peek().HasValue) {
+                    if (!peek().HasValue) {
                         var msg = string.Format("Some code expected after {0}", t.Value.content);
                         throw new LanguageError(msg, t.Value.line, t.Value.column);
                     }
@@ -309,28 +314,28 @@ namespace HerberLanguage {
                 }
                 if (op != null) {
                     var msg = string.Format("Unexpected character '{0}'.", op);
-                    throw new LanguageError(msg, t.Value.line, t.Value.column+1);
+                    throw new LanguageError(msg, t.Value.line, t.Value.column + 1);
                 }
             }
             return new Next(node);
         }
-        
+
         public Number parseNumer() {
             Token? t = peek();
-            
+
             var sign = 1;
-            
-            while(t?.type == "-") {
+
+            while (t?.type == "-") {
                 sign *= -1;
                 consume("-");
                 t = peek();
             }
             var numer = Int32.Parse(t?.content);
-            
+
             consume("NUMBER");
-            
+
             return new Number(numer * sign);
-            
+
         }
     }
 }
