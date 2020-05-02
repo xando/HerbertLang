@@ -14,14 +14,6 @@ namespace HerberLanguage {
             this.position = 0;
         }
 
-        public void verify() {
-            if(position != tokens.Count) {
-                // ToDo:
-                var msg = string.Format("tokens left, next token {0}", tokens[position]);
-                throw new LanguageError(msg);
-            }
-        }
-
         Token? peek(int ahead=0) {
             if (position + ahead < tokens.Count) {
                 return tokens[position + ahead];

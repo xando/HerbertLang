@@ -35,7 +35,7 @@ namespace HerbertLang.Tests {
 
     public class SolveTest {
         // It says hhere PLAYER_BOTTOM but ...
-        // we using array from the top to bottom 
+        // we using array from the top to bottom
 
         [Fact]
         public void solve_1() {
@@ -48,15 +48,15 @@ namespace HerbertLang.Tests {
             var execution = new Execution("sss");
 
             var solution = execution.solve(world);
-            
+
             Assert.Equal(solution.steps.Count, 3);
-            
+
             Assert.Equal(solution.steps[0], ExecutionStep.STEP_FORWARD);
             Assert.Equal(solution.steps[1], ExecutionStep.STEP_FORWARD);
             Assert.Equal(solution.steps[2], ExecutionStep.STEP_BAD);
             Assert.True(solution.success);
         }
-        
+
         [Fact]
         public void solve_2() {
             Tile[,] world = {
@@ -68,9 +68,9 @@ namespace HerbertLang.Tests {
             var execution = new Execution("s");
 
             var solution = execution.solve(world);
-            
+
             Assert.Equal(solution.steps.Count, 1);
-            
+
             Assert.Equal(solution.steps[0], ExecutionStep.STEP_FORWARD);
             Assert.False(solution.success);
         }
