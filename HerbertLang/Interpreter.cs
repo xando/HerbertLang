@@ -1,22 +1,49 @@
+using System.Collections.Generic;
+using System.Text;
 
 
 namespace HerberLanguage
 {
     public static class Interpreter
     {
-        public static string execute(string code)
-        {
 
-            var tokens = Lexer.tokenize(code);
-            var parser = new Parser(tokens);
+        public static List<ExecutionStep> toCode(string program) {
+            var tokens = Lexer.tokenize(program);
+            var ast = Parser.parse(tokens);
 
-            try
-            {
-                var program = parser.parseProgram() as Program;
-                return program.compile();
+            var code = ast.eval() as Code;
+            var steps = new List<ExecutionStep>();
+
+            if (code == null) return steps;
+
+            foreach (Step step in code.steps) {
+                steps.Add(step.step_);
             }
-            catch (LanguageError ex)
-            {
+
+            return steps;
+        }
+
+        public static string toString(string program)
+        {
+            try {
+                var tokens = Lexer.tokenize(program);
+                var ast = Parser.parse(tokens);
+
+                var code = ast.eval() as Code;
+
+                if (code == null) return "";
+
+                var steps = new StringBuilder();
+
+                if (code != null) {
+                    foreach (Step step in code.steps) {
+                        steps.Append(step.step);
+                    }
+                }
+
+                return steps.ToString();
+
+            } catch (LanguageError ex) {
                 return ex.ToString();
             }
         }
