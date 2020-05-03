@@ -84,19 +84,6 @@ namespace HerberLanguage {
 
             return this.next.eval(defaultContext);
         }
-
-        public string compile() {
-            StringBuilder steps = new StringBuilder();
-
-            var code = this.eval() as Code;
-
-            if (code != null)
-            foreach(Step step in code.steps) {
-                steps.Append(step.step);
-            }
-
-            return steps.ToString();
-        }
     }
 
     public class Step : INode {
