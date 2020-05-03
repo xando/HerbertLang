@@ -85,18 +85,6 @@ namespace HerberLanguage {
             return this.next.eval(defaultContext);
         }
 
-        public List<ExecutionStep> compile2() {
-            var code = this.eval() as Code;
-
-            var steps_ = new List<ExecutionStep>();
-            if (code != null)
-            foreach(Step step in code.steps) {
-                steps_.Add(step.step_);
-            }
-
-            return steps_;
-        }
-
         public string compile() {
             StringBuilder steps = new StringBuilder();
 

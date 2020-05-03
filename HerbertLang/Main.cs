@@ -10,13 +10,12 @@ public class Herbert
 
     static int passed = 0;
 
-    static void check(string name, string code, ExecutionStep[] expected) {
+    static void check(string name, string program, ExecutionStep[] expected) {
         if (args.Length > 0 && args[0] != name) {
             return;
         }
 
-        var parser = new Parser(Lexer.tokenize(code));
-        var output = parser.parseProgram().compile2().ToArray();
+        var output = Interpreter.toCode(program).ToArray();
 
         int biggerSize;
         if (expected.Length > output.Length) {
@@ -72,7 +71,7 @@ public class Herbert
         Console.Write("\n");
         Console.ResetColor();
 
-        Console.WriteLine(code);
+        Console.WriteLine(program);
 
         if (!success) {
             Console.ForegroundColor = ConsoleColor.White;
@@ -105,7 +104,7 @@ public class Herbert
         }
 
     }
-    
+
     public static void solve(string name, Tile[,] world, string code) {
         if (args.Length > 0 && args[0] != name) {
             return;
@@ -113,7 +112,7 @@ public class Herbert
 
         var execution = new Execution(code);
         var solution = execution.solve(world);
-        
+
         if (!solution.success) {
 
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
@@ -136,7 +135,7 @@ public class Herbert
                 Console.WriteLine("");
             }
         }
-        
+
         total++;
         if (solution.success)
         {
@@ -145,9 +144,9 @@ public class Herbert
     }
 
     static public void Main(string[] args)
-    {   
+    {
         Herbert.args = args;
-        
+
         solve("solve no items",
             new Tile[,] {
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
@@ -165,7 +164,7 @@ public class Herbert
             },
             "s"
         );
-        
+
         solve("solve step turn",
             new Tile[,] {
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
@@ -174,7 +173,7 @@ public class Herbert
             },
             "srs"
         );
-        
+
         solve("solve step turn",
             new Tile[,] {
                 {Tile.ITEM, Tile.SPACE, Tile.ITEM},

@@ -6,10 +6,9 @@ using System.Text;
 namespace HerberLanguage {
     public class Parser {
 
-        public static string parse(List<Token> tokens) {
+        public static INode parse(List<Token> tokens) {
             var parser = new Parser(tokens);
-            var program = parser.parseProgram() as Program;
-            return program.compile();
+            return parser.parseProgram();
         }
 
         List<Token> tokens;

@@ -8,9 +8,7 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void StepTest_1() {
-            var code = "sss";
-            var execution = new Execution(code);
-            var steps = execution.getSteps();
+            var steps = Interpreter.toCode("sss");
 
             Assert.Equal(3, steps.Count);
 
@@ -21,9 +19,7 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void StepTest_2() {
-            var code = "srl";
-            var execution = new Execution(code);
-            var steps = execution.getSteps();
+            var steps = Interpreter.toCode("srl");
 
             Assert.Equal(3, steps.Count);
 
