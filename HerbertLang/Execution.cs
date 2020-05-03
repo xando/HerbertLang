@@ -19,7 +19,6 @@ namespace HerberLanguage {
         TURN_LEFT,
         STEP_FORWARD,
         STEP_BAD,
-        OVERFLOW
     };
 
     // public Dictionary<myComplex, int> myMap = new Dictionary<myComplex, int>();
@@ -62,29 +61,6 @@ namespace HerberLanguage {
             this.codeInput = codeInput;
         }
 
-        public List<ExecutionStep> getSteps() {
-            var tokens = Lexer.tokenize(codeInput);
-            var parser = new Parser(tokens);
-
-            var steps = (parser.parseProgram() as Program).compile2();
-
-            // List<ExecutionStep> steps = new List<ExecutionStep>();
-
-            // foreach(char step in codeOutput) {
-            //     if (step == 's'){
-            //         steps.Add(ExecutionStep.STEP_FORWARD);
-            //     } else if (step == 'r'){
-            //         steps.Add(ExecutionStep.TURN_RIGHT);
-            //     } else if (step == 'l'){
-            //         steps.Add(ExecutionStep.TURN_LEFT);
-            //     } else {
-            //         steps.Add(ExecutionStep.STEP_BAD);
-            //     }
-            // }
-
-            return steps;
-        }
-
         public Solution solve(Tile[,] world) {
 
             int direction = 0;
@@ -105,7 +81,7 @@ namespace HerberLanguage {
             
             List<ExecutionStep> steps;
             try {
-                steps = getSteps();
+                steps = Interpreter.toCode(codeInput);
             }
             catch (LanguageError error) {
                 return new Solution(error);
