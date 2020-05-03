@@ -16,14 +16,14 @@ namespace HerbertLang.Tests {
             var code = parser.parseNext();
             var evalCode = code.eval() as Code;
 
-            Assert.Equal(evalCode.steps.Count, 3);
-            Assert.Equal((evalCode.steps[0] as Step).column, 1);
-            Assert.Equal((evalCode.steps[1] as Step).column, 2);
-            Assert.Equal((evalCode.steps[2] as Step).column, 3);
+            Assert.Equal(3, evalCode.steps.Count);
+            Assert.Equal(1, (evalCode.steps[0] as Step).column);
+            Assert.Equal(2, (evalCode.steps[1] as Step).column);
+            Assert.Equal(3, (evalCode.steps[2] as Step).column);
 
-            Assert.Equal((evalCode.steps[0] as Step).line, 1);
-            Assert.Equal((evalCode.steps[1] as Step).line, 1);
-            Assert.Equal((evalCode.steps[2] as Step).line, 1);
+            Assert.Equal(1, (evalCode.steps[0] as Step).line);
+            Assert.Equal(1, (evalCode.steps[1] as Step).line);
+            Assert.Equal(1, (evalCode.steps[2] as Step).line);
         }
 
         [Fact]
@@ -34,9 +34,9 @@ namespace HerbertLang.Tests {
             var code = parser.parseFunctionDefinition();
             var evalFunctionDefinition = code.eval() as FunctionDefinition;
 
-            Assert.Equal(evalFunctionDefinition.name, "f");
-            Assert.Equal(evalFunctionDefinition.column, 1);
-            Assert.Equal(evalFunctionDefinition.line, 1);
+            Assert.Equal("f", evalFunctionDefinition.name);
+            Assert.Equal(1, evalFunctionDefinition.column);
+            Assert.Equal(1, evalFunctionDefinition.line);
 
             Assert.NotNull(evalFunctionDefinition.next);
             Assert.NotNull(evalFunctionDefinition.next.next);
@@ -54,10 +54,10 @@ namespace HerbertLang.Tests {
             var code = parser.parseFunctionDefinition();
             var evalFunctionDefinition = code.eval() as FunctionDefinition;
 
-            Assert.Equal(evalFunctionDefinition.name, "f");
-            Assert.Equal(evalFunctionDefinition.column, 1);
-            Assert.Equal(evalFunctionDefinition.line, 1);
-            
+            Assert.Equal("f", evalFunctionDefinition.name);
+            Assert.Equal(1, evalFunctionDefinition.column);
+            Assert.Equal(1, evalFunctionDefinition.line);
+
             Assert.IsType<Step>(evalFunctionDefinition.next.node);
             Assert.IsType<Step>(evalFunctionDefinition.next.next.node);
             Assert.IsType<Variable>(evalFunctionDefinition.next.next.next.node);

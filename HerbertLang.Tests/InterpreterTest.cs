@@ -8,22 +8,22 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void Test_ToString() {
-            Assert.Equal(Interpreter.toString("sss"), "sss");
+            Assert.Equal("sss", Interpreter.toString("sss"));
         }
 
         [Fact]
         public void Test_ToString_Error() {
-            Assert.Equal(Interpreter.toString("fss"), "1:1 Function 'f' is undefined");
+            Assert.Equal("1:1 Function 'f' is undefined", Interpreter.toString("fss"));
         }
 
 
         [Fact]
         public void Test_ToCode() {
-            Assert.Equal(Interpreter.toCode("sss"), new List<ExecutionStep>(){
+            Assert.Equal(new List<ExecutionStep>(){
                 ExecutionStep.STEP_FORWARD,
                 ExecutionStep.STEP_FORWARD,
                 ExecutionStep.STEP_FORWARD,
-            });
+            }, Interpreter.toCode("sss"));
         }
 
         [Fact]

@@ -45,11 +45,11 @@ namespace HerbertLang.Tests {
 
             var solution = execution.solve(world);
 
-            Assert.Equal(solution.steps.Count, 3);
+            Assert.Equal(3, solution.steps.Count);
 
-            Assert.Equal(solution.steps[0], ExecutionStep.STEP_FORWARD);
-            Assert.Equal(solution.steps[1], ExecutionStep.STEP_FORWARD);
-            Assert.Equal(solution.steps[2], ExecutionStep.STEP_BAD);
+            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[0]);
+            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[1]);
+            Assert.Equal(ExecutionStep.STEP_BAD, solution.steps[2]);
             Assert.True(solution.success);
         }
 
@@ -65,9 +65,9 @@ namespace HerbertLang.Tests {
 
             var solution = execution.solve(world);
 
-            Assert.Equal(solution.steps.Count, 1);
+            Assert.Single(solution.steps);
 
-            Assert.Equal(solution.steps[0], ExecutionStep.STEP_FORWARD);
+            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[0]);
             Assert.False(solution.success);
         }
 
