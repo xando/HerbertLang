@@ -1,38 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 
 namespace HerberLanguage {
 
     public class Context {
         public Stack<StackFrame> stack;
-        public Dictionary<string, FunctionDefinition> definitions;
-
-        public Context(StackFrame frame, Dictionary<string, FunctionDefinition> definitions) {
-            this.stack = stack ?? new Stack<StackFrame>();
-            this.stack.Push(frame);
-            this.definitions = definitions;
-        }
-
-        public Context() {
-            this.stack = new Stack<StackFrame>();
-            this.stack.Push(new StackFrame());
-            this.definitions = new Dictionary<string, FunctionDefinition>();
-        }
-
-        public Context(StackFrame frame) {
-            this.stack = new Stack<StackFrame>();
-            this.stack.Push(frame);
-
-            this.definitions = new Dictionary<string, FunctionDefinition>();
-        }
+        public Dictionary<string, FunctionDefinition> functionDefinitions;
 
         public Context(Dictionary<string, FunctionDefinition> definitions) {
             this.stack = new Stack<StackFrame>();
             this.stack.Push(new StackFrame());
 
-            this.definitions = definitions;
+            this.functionDefinitions = definitions;
         }
     }
 
@@ -162,12 +142,12 @@ namespace HerberLanguage {
         }
         public override INode eval(Context context = null) {
 
-            if (!context.definitions.ContainsKey(this.name)) {
+            if (!context.functionDefinitions.ContainsKey(this.name)) {
                 var msg = string.Format("Function '{0}' is undefined", this.name);
                 throw new LanguageError(msg, this);
             }
 
-            var definition = context.definitions[this.name];
+            var definition = context.functionDefinitions[this.name];
 
             if (definition.parameters.Count > this.arguments.Count) {
                 var msg = string.Format("Funtion '{0}' has missing argument", this.name);
