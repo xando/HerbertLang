@@ -75,21 +75,15 @@ namespace HerberLanguage {
             this.line = token.line;
             this.column = token.column;
 
-            if (token.content == "s")
-            {
+            if (token.content == "s") {
                 this.step_ = ExecutionStep.STEP_FORWARD;
-            }
-            else
-               if (token.content == "r")
-            {
+            } else
+               if (token.content == "r") {
                 this.step_ = ExecutionStep.TURN_RIGHT;
-            }
-            else
-               if (token.content == "l")
-            {
+            } else
+               if (token.content == "l") {
                 this.step_ = ExecutionStep.TURN_LEFT;
-            }
-            else {
+            } else {
                 throw new Exception("Some generic");
             }
 
@@ -331,7 +325,7 @@ namespace HerberLanguage {
         public override INode eval(Context context = null) {
             INode left;
             if (this.node is Step) {
-                left = new Code(new List<INode>(){ this.node.eval(context) });
+                left = new Code(new List<INode>() { this.node.eval(context) });
             } else {
                 left = this.node.eval(context);
             }
@@ -349,7 +343,7 @@ namespace HerberLanguage {
                 return right;
             }
 
-            if(left.GetType() != right.GetType()) {
+            if (left.GetType() != right.GetType()) {
                 throw new LanguageError("Bad operation", right.line, right.column);
             }
 
