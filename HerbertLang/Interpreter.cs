@@ -7,7 +7,7 @@ namespace HerberLanguage
     public static class Interpreter
     {
 
-        public static List<ExecutionStep> toCode(string program) {
+        public static List<ExecutionStep> evalToCode(string program) {
             var tokens = Lexer.tokenize(program);
             var ast = Parser.parse(tokens);
 
@@ -23,7 +23,7 @@ namespace HerberLanguage
             return steps;
         }
 
-        public static string toString(string program)
+        public static string evalToString(string program)
         {
             try {
                 var tokens = Lexer.tokenize(program);

@@ -8,12 +8,12 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void Test_ToString() {
-            Assert.Equal("sss", Interpreter.toString("sss"));
+            Assert.Equal("sss", Interpreter.evalToString("sss"));
         }
 
         [Fact]
         public void Test_ToString_Error() {
-            Assert.Equal("1:1 Function 'f' is undefined", Interpreter.toString("fss"));
+            Assert.Equal("1:1 Function 'f' is undefined", Interpreter.evalToString("fss"));
         }
 
 
@@ -23,13 +23,13 @@ namespace HerbertLang.Tests {
                 ExecutionStep.STEP_FORWARD,
                 ExecutionStep.STEP_FORWARD,
                 ExecutionStep.STEP_FORWARD,
-            }, Interpreter.toCode("sss"));
+            }, Interpreter.evalToCode("sss"));
         }
 
         [Fact]
         public void Test_ToCode_Exception() {
 
-            LanguageError ex = Assert.Throws<LanguageError>(() => Interpreter.toCode("f"));
+            LanguageError ex = Assert.Throws<LanguageError>(() => Interpreter.evalToCode("f"));
 
             Assert.Equal(1, ex.line);
             Assert.Equal(1, ex.column);
@@ -48,7 +48,7 @@ lsr
 ";
             Assert.Equal(
                 "rrlsr",
-                Interpreter.toString(code)
+                Interpreter.evalToString(code)
             );
 
         }
@@ -61,7 +61,7 @@ fsss
             ";
             Assert.Equal(
                 "rrsss", 
-                Interpreter.toString(code)
+                Interpreter.evalToString(code)
             );
 
         }
@@ -73,7 +73,7 @@ f(A):A
 f(ss)";
 
             Assert.Equal("ss",
-            Interpreter.toString(h)
+            Interpreter.evalToString(h)
             );
         }
 
@@ -84,7 +84,7 @@ f(ss)";
 f(A, B):AB
 f(ss, rr)";
 
-            Assert.Equal("ssrr", Interpreter.toString(h));
+            Assert.Equal("ssrr", Interpreter.evalToString(h));
         }
 
 
@@ -96,7 +96,7 @@ z:ll
 f:rrz
 fsss";
             
-            Assert.Equal("rrllsss", Interpreter.toString(h));
+            Assert.Equal("rrllsss", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -106,7 +106,7 @@ fsss";
 f(A):A
 f(ss)rr";
             
-            Assert.Equal("ssrr", Interpreter.toString(h));
+            Assert.Equal("ssrr", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -116,7 +116,7 @@ f(ss)rr";
 f(A,B):AB
 f(ss,ll)rr";
 
-            Assert.Equal("ssllrr", Interpreter.toString(h));
+            Assert.Equal("ssllrr", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -127,7 +127,7 @@ f(ss,ll)rr";
             f(A,B):AzzzB
             f(ss,ll)rr";
             
-            Assert.Equal("sssssssssssllrr", Interpreter.toString(h));
+            Assert.Equal("sssssssssssllrr", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -137,7 +137,7 @@ z:sss
 f(A):lA
 f(z)rr";
 
-            Assert.Equal("lsssrr", Interpreter.toString(h));
+            Assert.Equal("lsssrr", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -147,7 +147,7 @@ z:sss
 f(A):lA
 f(ss)r";
             
-            Assert.Equal("lssr", Interpreter.toString(h));
+            Assert.Equal("lssr", Interpreter.evalToString(h));
         }
 
 
@@ -157,7 +157,7 @@ f(ss)r";
 f:f
 f";
             
-            Assert.Equal("", Interpreter.toString(h));
+            Assert.Equal("", Interpreter.evalToString(h));
         }
         [Fact]
         public void EvalProgram_11() {
@@ -165,7 +165,7 @@ f";
 f(A):f(A)s
 f(0)";
             
-            Assert.Equal("", Interpreter.toString(h));
+            Assert.Equal("", Interpreter.evalToString(h));
         }
 
         [Fact]
@@ -174,7 +174,7 @@ f(0)";
 f(A):sf(A-1)
 f(2)";
             
-            Assert.Equal("ss", Interpreter.toString(h));
+            Assert.Equal("ss", Interpreter.evalToString(h));
         }
         
         [Fact]
@@ -183,7 +183,7 @@ f(2)";
 f(A):f(A-1)s
 f(2)";
             
-            Assert.Equal("ss", Interpreter.toString(h));
+            Assert.Equal("ss", Interpreter.evalToString(h));
         }
         
         [Fact]
@@ -192,7 +192,7 @@ f(2)";
 f(A):ss
 f(2)";
             
-            Assert.Equal("ss", Interpreter.toString(h));
+            Assert.Equal("ss", Interpreter.evalToString(h));
         }
         
         [Fact]
@@ -203,7 +203,7 @@ sss
 
 ";
             
-            Assert.Equal("sss", Interpreter.toString(h));
+            Assert.Equal("sss", Interpreter.evalToString(h));
         }
         
         [Fact]
@@ -211,7 +211,7 @@ sss
             var h = @"
 f:f";
             
-            Assert.Equal("", Interpreter.toString(h));
+            Assert.Equal("", Interpreter.evalToString(h));
         }
 
     }
