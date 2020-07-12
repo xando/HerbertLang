@@ -15,7 +15,7 @@ public class Herbert
             return;
         }
 
-        var output = Interpreter.toCode(program).ToArray();
+        var output = Interpreter.evalToCode(program).ToArray();
 
         int biggerSize;
         if (expected.Length > output.Length) {

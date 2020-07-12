@@ -81,7 +81,7 @@ namespace HerberLanguage {
             
             List<ExecutionStep> steps;
             try {
-                steps = Interpreter.toCode(codeInput);
+                steps = Interpreter.evalToCode(codeInput);
             }
             catch (LanguageError error) {
                 return new Solution(error);
