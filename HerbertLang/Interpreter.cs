@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace HerberLang
-{
-    public static class Interpreter
-    {
+namespace HerberLang {
+    public static class Interpreter {
 
         public static List<ExecutionStep> evalToCode(string program) {
             var tokens = Lexer.tokenize(program);
@@ -23,8 +21,7 @@ namespace HerberLang
             return steps;
         }
 
-        public static string evalToString(string program)
-        {
+        public static string evalToString(string program) {
             try {
                 var tokens = Lexer.tokenize(program);
                 var ast = Parser.parse(tokens);

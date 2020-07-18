@@ -5,13 +5,13 @@ using System.Collections.Generic;
 namespace HerberLang {
 
     public enum Tile {
-        PLAYER_TOP=0,
-        PLAYER_RIGHT=1,
-        PLAYER_BOTTOM=2,
-        PLAYER_LEFT=3,
-        SPACE=4,
-        OBSTACLE=5,
-        ITEM=9,
+        PLAYER_TOP = 0,
+        PLAYER_RIGHT = 1,
+        PLAYER_BOTTOM = 2,
+        PLAYER_LEFT = 3,
+        SPACE = 4,
+        OBSTACLE = 5,
+        ITEM = 9,
     }
 
     public enum ExecutionStep {
@@ -55,44 +55,43 @@ namespace HerberLang {
 
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
-                    if (world[i,j] == Tile.PLAYER_TOP ||
-                        world[i,j] == Tile.PLAYER_RIGHT ||
-                        world[i,j] == Tile.PLAYER_BOTTOM ||
-                        world[i,j] == Tile.PLAYER_LEFT) {
-                        direction = (int)world[i,j];
+                    if (world[i, j] == Tile.PLAYER_TOP ||
+                        world[i, j] == Tile.PLAYER_RIGHT ||
+                        world[i, j] == Tile.PLAYER_BOTTOM ||
+                        world[i, j] == Tile.PLAYER_LEFT) {
+                        direction = (int)world[i, j];
                         position[0] = i;
                         position[1] = j;
                     }
                 }
             }
-            
+
             List<ExecutionStep> steps;
             try {
                 steps = Interpreter.evalToCode(codeInput);
-            }
-            catch (LanguageError error) {
+            } catch (LanguageError error) {
                 return new Solution(error);
             }
 
             List<ExecutionStep> solutionSteps = new List<ExecutionStep>();
-            
-            foreach(var step in steps) {
+
+            foreach (var step in steps) {
                 if (step == ExecutionStep.TURN_RIGHT) {
-                     direction = (direction + 1) % 4;
-                     solutionSteps.Add(ExecutionStep.TURN_RIGHT);
+                    direction = (direction + 1) % 4;
+                    solutionSteps.Add(ExecutionStep.TURN_RIGHT);
                 } else
                 if (step == ExecutionStep.TURN_LEFT) {
-                     direction = (direction - 1) % 4;
-                     if (direction < 0) {
-                         direction += 4;
-                     }
-                     solutionSteps.Add(ExecutionStep.TURN_LEFT);
+                    direction = (direction - 1) % 4;
+                    if (direction < 0) {
+                        direction += 4;
+                    }
+                    solutionSteps.Add(ExecutionStep.TURN_LEFT);
                 } else
                 if (step == ExecutionStep.STEP_FORWARD) {
                     int[] nextPosition = new int[2];
 
                     position.CopyTo(nextPosition, 0);
-                    
+
 
                     if (direction == 0) {
                         nextPosition[0]++;
@@ -129,7 +128,7 @@ namespace HerberLang {
             bool success = true;
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
-                    if (world[i,j] == Tile.ITEM) {
+                    if (world[i, j] == Tile.ITEM) {
                         success = false;
                         break;
                     }

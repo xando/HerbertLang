@@ -4,8 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace HerberLang {
 
-    public struct Token
-    {
+    public struct Token {
         public string content;
         public string type;
         public int column;
@@ -18,8 +17,7 @@ namespace HerberLang {
             this.column = column;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return string.Format("<Token: {0}, '{1}', {2}:{3}>", content, type, line, column);
         }
     }
