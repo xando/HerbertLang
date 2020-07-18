@@ -3,18 +3,25 @@
 * Install CLI `dotnet` 
 * Restore Project `dotnet restore`
 
-# Build 
+
+# Build the language as the C# library
 
 `dotnet build`
 
-# Test
+
+# Run the tests
 
 `dotnet test`
+
+also to run the test with `watch`
+
+`dotnet watch --project HerbertLang.Tests tes`
+
 
 # Notes 
 
 ```
--> Solution 
+-> Solution  
    - HerbertLang (There is a reference set to TEST dotnet add ... reference)
    - HerbertLang.Tests 
 ```
@@ -24,7 +31,8 @@
 ```
 LEXER -> tokens
 PARSER -> ast
-INTEPRETER -> code/string -> code/steps 
+INTERPRETER -> (code/string | code/steps)
+SOLVER (code, world) -> solution
 ```
 
 # Idea 
