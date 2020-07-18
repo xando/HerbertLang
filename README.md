@@ -15,7 +15,7 @@
 
 also to run the test with `watch`
 
-`dotnet watch --project HerbertLang.Tests tes`
+`dotnet watch --project HerbertLang.Tests test`
 
 
 # Notes 
