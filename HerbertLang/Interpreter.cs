@@ -5,16 +5,16 @@ using System.Text;
 namespace HerberLang {
     public static class Interpreter {
 
-        public static List<ExecutionStep> evalToCode(string program) {
+        public static List<Step> evalToCode(string program) {
             var tokens = Lexer.tokenize(program);
             var ast = Parser.parse(tokens);
 
-            var code = ast.eval() as Code;
-            var steps = new List<ExecutionStep>();
+            var code = ast.eval() as CodeNode;
+            var steps = new List<Step>();
 
             if (code == null) return steps;
 
-            foreach (Step step in code.steps) {
+            foreach (StepNode step in code.steps) {
                 steps.Add(step.step_);
             }
 
@@ -26,14 +26,14 @@ namespace HerberLang {
                 var tokens = Lexer.tokenize(program);
                 var ast = Parser.parse(tokens);
 
-                var code = ast.eval() as Code;
+                var code = ast.eval() as CodeNode;
 
                 if (code == null) return "";
 
                 var steps = new StringBuilder();
 
                 if (code != null) {
-                    foreach (Step step in code.steps) {
+                    foreach (StepNode step in code.steps) {
                         steps.Append(step.step);
                     }
                 }

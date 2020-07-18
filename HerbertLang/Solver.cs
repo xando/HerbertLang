@@ -13,7 +13,7 @@ namespace HerberLang {
         ITEM = 9,
     }
 
-    public enum ExecutionStep {
+    public enum Step {
         TURN_RIGHT,
         TURN_LEFT,
         STEP_FORWARD,
@@ -24,10 +24,10 @@ namespace HerberLang {
         public bool success = false;
         public LanguageError error;
 
-        public List<ExecutionStep> steps;
+        public List<Step> steps;
         public string code;
 
-        public Solution(bool success, List<ExecutionStep> steps, string code) {
+        public Solution(bool success, List<Step> steps, string code) {
             this.success = success;
             this.steps = steps;
             this.code = code;
@@ -39,15 +39,9 @@ namespace HerberLang {
 
     }
 
-    public class Execution {
+    public class Solver {
 
-        string codeInput;
-
-        public Execution(string codeInput) {
-            this.codeInput = codeInput;
-        }
-
-        public Solution solve(Tile[,] world) {
+        public static Solution solve(string codeInput, Tile[,] world) {
 
             int direction = 0;
             int[] position = new int[2];
@@ -65,28 +59,28 @@ namespace HerberLang {
                 }
             }
 
-            List<ExecutionStep> steps;
+            List<Step> interpreterSteps;
             try {
-                steps = Interpreter.evalToCode(codeInput);
+                interpreterSteps = Interpreter.evalToCode(codeInput);
             } catch (LanguageError error) {
                 return new Solution(error);
             }
 
-            List<ExecutionStep> solutionSteps = new List<ExecutionStep>();
+            List<Step> solutionSteps = new List<Step>();
 
-            foreach (var step in steps) {
-                if (step == ExecutionStep.TURN_RIGHT) {
+            foreach (var step in interpreterSteps) {
+                if (step == Step.TURN_RIGHT) {
                     direction = (direction + 1) % 4;
-                    solutionSteps.Add(ExecutionStep.TURN_RIGHT);
+                    solutionSteps.Add(Step.TURN_RIGHT);
                 } else
-                if (step == ExecutionStep.TURN_LEFT) {
+                if (step == Step.TURN_LEFT) {
                     direction = (direction - 1) % 4;
                     if (direction < 0) {
                         direction += 4;
                     }
-                    solutionSteps.Add(ExecutionStep.TURN_LEFT);
+                    solutionSteps.Add(Step.TURN_LEFT);
                 } else
-                if (step == ExecutionStep.STEP_FORWARD) {
+                if (step == Step.STEP_FORWARD) {
                     int[] nextPosition = new int[2];
 
                     position.CopyTo(nextPosition, 0);
@@ -107,13 +101,13 @@ namespace HerberLang {
 
                     if (nextPosition[0] > world.GetUpperBound(0) ||
                         nextPosition[0] < 0) {
-                        solutionSteps.Add(ExecutionStep.STEP_BAD);
+                        solutionSteps.Add(Step.STEP_BAD);
                     } else
                     if (nextPosition[1] > world.GetUpperBound(1) ||
                         nextPosition[1] < 0) {
-                        solutionSteps.Add(ExecutionStep.STEP_BAD);
+                        solutionSteps.Add(Step.STEP_BAD);
                     } else {
-                        solutionSteps.Add(ExecutionStep.STEP_FORWARD);
+                        solutionSteps.Add(Step.STEP_FORWARD);
                         nextPosition.CopyTo(position, 0);
 
                         if (world[position[0], position[1]] == Tile.ITEM) {
@@ -134,7 +128,12 @@ namespace HerberLang {
                 }
             }
 
-            return new Solution(success, solutionSteps, this.codeInput);
+            return new Solution(
+                success, 
+                solutionSteps, 
+                codeInput
+            );
+
         }
     }
 }

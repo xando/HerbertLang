@@ -19,10 +19,10 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void Test_ToCode() {
-            Assert.Equal(new List<ExecutionStep>(){
-                ExecutionStep.STEP_FORWARD,
-                ExecutionStep.STEP_FORWARD,
-                ExecutionStep.STEP_FORWARD,
+            Assert.Equal(new List<Step>(){
+                Step.STEP_FORWARD,
+                Step.STEP_FORWARD,
+                Step.STEP_FORWARD,
             }, Interpreter.evalToCode("sss"));
         }
 

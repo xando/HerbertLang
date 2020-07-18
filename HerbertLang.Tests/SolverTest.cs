@@ -18,15 +18,13 @@ namespace HerbertLang.Tests {
                 {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
             };
 
-            var execution = new Execution("sss");
-
-            var solution = execution.solve(world);
+            var solution = Solver.solve("sss", world);
 
             Assert.Equal(3, solution.steps.Count);
 
-            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[0]);
-            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[1]);
-            Assert.Equal(ExecutionStep.STEP_BAD, solution.steps[2]);
+            Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
+            Assert.Equal(Step.STEP_FORWARD, solution.steps[1]);
+            Assert.Equal(Step.STEP_BAD, solution.steps[2]);
             Assert.True(solution.success);
         }
 
@@ -38,17 +36,13 @@ namespace HerbertLang.Tests {
                 {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
             };
 
-            var execution = new Execution("s");
-
-            var solution = execution.solve(world);
+            var solution = Solver.solve("s", world);
 
             Assert.Single(solution.steps);
 
-            Assert.Equal(ExecutionStep.STEP_FORWARD, solution.steps[0]);
+            Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
             Assert.False(solution.success);
         }
 
     }
-
-
 }

@@ -9,7 +9,7 @@ public class Herbert
 
     static int passed = 0;
 
-    static void check(string name, string program, ExecutionStep[] expected) {
+    static void check(string name, string program, Step[] expected) {
         if (args.Length > 0 && args[0] != name) {
             return;
         }
@@ -37,8 +37,8 @@ public class Herbert
             }
         }
 
-        var expectedAnnotated = new Tuple<bool, ExecutionStep>[expected.Length];
-        var outputAnnotated = new Tuple<bool, ExecutionStep>[biggerSize];
+        var expectedAnnotated = new Tuple<bool, Step>[expected.Length];
+        var outputAnnotated = new Tuple<bool, Step>[biggerSize];
 
         for (int i = 0; i < expected.Length; i++) {
             expectedAnnotated[i] = Tuple.Create(
@@ -109,8 +109,7 @@ public class Herbert
             return;
         }
 
-        var execution = new Execution(code);
-        var solution = execution.solve(world);
+        var solution = Solver.solve(code, world);
 
         if (!solution.success) {
 
@@ -182,85 +181,85 @@ public class Herbert
             "srsrssrssrss"
         );
 
-        check("simple 1", "s", new ExecutionStep[] { ExecutionStep.STEP_FORWARD });
+        check("simple 1", "s", new Step[] { Step.STEP_FORWARD });
 
-        check("simple 2", "srl", new ExecutionStep[] {
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.TURN_LEFT
+        check("simple 2", "srl", new Step[] {
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.TURN_LEFT
         });
 
-        check("multiline 1", "srl\nsss", new ExecutionStep[] {
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.TURN_LEFT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD
+        check("multiline 1", "srl\nsss", new Step[] {
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.TURN_LEFT,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD
         });
 
-        check("multiline 2", "\nsss\nsss\n\n", new ExecutionStep[] {
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD
+        check("multiline 2", "\nsss\nsss\n\n", new Step[] {
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD
         });
 
-        check("function 1", "f:s", new ExecutionStep[] {});
-        check("function 2", "f:s\nf", new ExecutionStep[] {
-            ExecutionStep.STEP_FORWARD });
-        check("function 3", "f:s\nf", new ExecutionStep[] {
-            ExecutionStep.STEP_FORWARD });
-        check("function 4", "f:s\nff", new ExecutionStep[]{
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD
+        check("function 1", "f:s", new Step[] {});
+        check("function 2", "f:s\nf", new Step[] {
+            Step.STEP_FORWARD });
+        check("function 3", "f:s\nf", new Step[] {
+            Step.STEP_FORWARD });
+        check("function 4", "f:s\nff", new Step[]{
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD
         });
 
-        check("function arguments", "f(A):AsA\nf(r)", new ExecutionStep[]{
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT
+        check("function arguments", "f(A):AsA\nf(r)", new Step[]{
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT
         });
 
-        check("function arguments", "f(A, B):ABsBA\nf(r,l)", new ExecutionStep[]{
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.TURN_LEFT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_LEFT,
-            ExecutionStep.TURN_RIGHT
+        check("function arguments", "f(A, B):ABsBA\nf(r,l)", new Step[]{
+            Step.TURN_RIGHT,
+            Step.TURN_LEFT,
+            Step.STEP_FORWARD,
+            Step.TURN_LEFT,
+            Step.TURN_RIGHT
         });
 
-        check("recursion load = 0", "f:sf\nf=0", new ExecutionStep[]{});
-        check("recursion load - 1", "f:sf\nf-1", new ExecutionStep[]{});
-        check("recursion load =- 1", "f:sf\nf=-1", new ExecutionStep[]{});
-        check("recursion load = 1", "f:sf-1\nf=1", new ExecutionStep[]{
-            ExecutionStep.STEP_FORWARD
+        check("recursion load = 0", "f:sf\nf=0", new Step[]{});
+        check("recursion load - 1", "f:sf\nf-1", new Step[]{});
+        check("recursion load =- 1", "f:sf\nf=-1", new Step[]{});
+        check("recursion load = 1", "f:sf-1\nf=1", new Step[]{
+            Step.STEP_FORWARD
         });
 
-        check("recursion load = 2", "f:sf-1\nf=2", new ExecutionStep[]{
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD
+        check("recursion load = 2", "f:sf-1\nf=2", new Step[]{
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD
         });
 
-        check("multi recursion load = 1", "z:srz-1\nf:sz-1f-1\nf=4", new ExecutionStep[]{
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.STEP_FORWARD,
-            ExecutionStep.TURN_RIGHT,
-            ExecutionStep.STEP_FORWARD
+        check("multi recursion load = 1", "z:srz-1\nf:sz-1f-1\nf=4", new Step[]{
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD,
+            Step.STEP_FORWARD,
+            Step.TURN_RIGHT,
+            Step.STEP_FORWARD
         });
 
         Console.WriteLine("");

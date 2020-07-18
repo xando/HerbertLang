@@ -14,16 +14,16 @@ namespace HerbertLang.Tests {
             var parser = new Parser(tokens);
 
             var code = parser.parseNext();
-            var evalCode = code.eval() as Code;
+            var evalCode = code.eval() as CodeNode;
 
             Assert.Equal(3, evalCode.steps.Count);
-            Assert.Equal(1, (evalCode.steps[0] as Step).column);
-            Assert.Equal(2, (evalCode.steps[1] as Step).column);
-            Assert.Equal(3, (evalCode.steps[2] as Step).column);
+            Assert.Equal(1, (evalCode.steps[0] as StepNode).column);
+            Assert.Equal(2, (evalCode.steps[1] as StepNode).column);
+            Assert.Equal(3, (evalCode.steps[2] as StepNode).column);
 
-            Assert.Equal(1, (evalCode.steps[0] as Step).line);
-            Assert.Equal(1, (evalCode.steps[1] as Step).line);
-            Assert.Equal(1, (evalCode.steps[2] as Step).line);
+            Assert.Equal(1, (evalCode.steps[0] as StepNode).line);
+            Assert.Equal(1, (evalCode.steps[1] as StepNode).line);
+            Assert.Equal(1, (evalCode.steps[2] as StepNode).line);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace HerbertLang.Tests {
             var parser = new Parser(tokens);
 
             var code = parser.parseFunctionDefinition();
-            var evalFunctionDefinition = code.eval() as FunctionDefinition;
+            var evalFunctionDefinition = code.eval() as FunctionDefinitionNode;
 
             Assert.Equal("f", evalFunctionDefinition.name);
             Assert.Equal(1, evalFunctionDefinition.column);
@@ -42,8 +42,8 @@ namespace HerbertLang.Tests {
             Assert.NotNull(evalFunctionDefinition.next.next);
             Assert.Null(evalFunctionDefinition.next.next.next);
 
-            Assert.Equal("s", (evalFunctionDefinition.next.node as Step).step);
-            Assert.Equal("r", (evalFunctionDefinition.next.next.node as Step).step);
+            Assert.Equal("s", (evalFunctionDefinition.next.node as StepNode).step);
+            Assert.Equal("r", (evalFunctionDefinition.next.next.node as StepNode).step);
         }
 
         [Fact]
@@ -52,16 +52,16 @@ namespace HerbertLang.Tests {
             var parser = new Parser(tokens);
 
             var code = parser.parseFunctionDefinition();
-            var evalFunctionDefinition = code.eval() as FunctionDefinition;
+            var evalFunctionDefinition = code.eval() as FunctionDefinitionNode;
 
             Assert.Equal("f", evalFunctionDefinition.name);
             Assert.Equal(1, evalFunctionDefinition.column);
             Assert.Equal(1, evalFunctionDefinition.line);
 
-            Assert.IsType<Step>(evalFunctionDefinition.next.node);
-            Assert.IsType<Step>(evalFunctionDefinition.next.next.node);
-            Assert.IsType<Variable>(evalFunctionDefinition.next.next.next.node);
-            Assert.IsType<Variable>(evalFunctionDefinition.next.next.next.next.node);
+            Assert.IsType<StepNode>(evalFunctionDefinition.next.node);
+            Assert.IsType<StepNode>(evalFunctionDefinition.next.next.node);
+            Assert.IsType<VariableNode>(evalFunctionDefinition.next.next.next.node);
+            Assert.IsType<VariableNode>(evalFunctionDefinition.next.next.next.next.node);
         }
 
         [Fact]

@@ -62,7 +62,7 @@ namespace HerberLang {
             position++;
         }
 
-        public FunctionDefinition parseFunctionDefinition() {
+        public FunctionDefinitionNode parseFunctionDefinition() {
             var parameters = new List<INode>();
             var parametersNames = new List<string>();
 
@@ -79,7 +79,7 @@ namespace HerberLang {
 
                 while (peek().HasValue && peek().Value.type == "PARAMETER") {
                     var parameterToken = peek().Value;
-                    var parameter = new FunctionParameter(parameterToken);
+                    var parameter = new FunctionParameterNode(parameterToken);
 
                     if (parametersNames.Contains(parameter.name)) {
                         throw new LanguageError("Duplicate parameter", parameter);
@@ -100,16 +100,16 @@ namespace HerberLang {
             }
             consume(":");
             var next = parseNext();
-            var definition = new FunctionDefinition(token, parameters, next);
+            var definition = new FunctionDefinitionNode(token, parameters, next);
             return definition;
         }
 
-        public Program parseProgram() {
+        public ProgramNode parseProgram() {
 
             Token? t = peek();
 
-            var definitions = new Dictionary<string, FunctionDefinition>();
-            Next start = null;
+            var definitions = new Dictionary<string, FunctionDefinitionNode>();
+            NextNode start = null;
 
             do {
                 while (t.HasValue && t.Value.type == "NEW_LINE") {
@@ -145,10 +145,10 @@ namespace HerberLang {
 
             } while (t.HasValue && t.Value.type == "NEW_LINE");
 
-            return new Program(definitions, start);
+            return new ProgramNode(definitions, start);
         }
 
-        public FunctionCall parseFunctionCall() {
+        public FunctionCallNode parseFunctionCall() {
             var arguments = new List<INode>();
             bool durabilitySet = false;
             var durability = 1;
@@ -202,11 +202,11 @@ namespace HerberLang {
                 consume(")");
             }
 
-            return new FunctionCall(functionToken, arguments,
+            return new FunctionCallNode(functionToken, arguments,
             durability, durabilitySet);
         }
 
-        public Code parseCode() {
+        public CodeNode parseCode() {
 
             List<INode> steps = new List<INode>();
 
@@ -221,21 +221,21 @@ namespace HerberLang {
                     steps.Add(parseFunctionCall());
 
                 } else if (t.Value.type == "PARAMETER") {
-                    steps.Add(new Variable(t.Value));
+                    steps.Add(new VariableNode(t.Value));
                     consume("PARAMETER");
 
                 } else if (t.Value.type == "STEP") {
-                    steps.Add(new Step(t.Value));
+                    steps.Add(new StepNode(t.Value));
                     consume("STEP");
                 }
 
                 t = peek();
             }
 
-            return new Code(steps);
+            return new CodeNode(steps);
         }
 
-        public Next parseNext() {
+        public NextNode parseNext() {
             Token? t = peek();
             INode node = null;
 
@@ -251,15 +251,15 @@ namespace HerberLang {
             }
 
             if (t.Value.type == "STEP") {
-                node = new Step(t.Value);
+                node = new StepNode(t.Value);
                 consume("STEP");
             } else
             if (t.Value.type == "PARAMETER") {
-                node = new Variable(t.Value);
+                node = new VariableNode(t.Value);
                 consume("PARAMETER");
             } else
             if (t.Value.type == "NUMBER") {
-                node = new Number(t.Value);
+                node = new NumberNode(t.Value);
                 consume("NUMBER");
             } else
             if (t.Value.type == "FUNCTION") {
@@ -308,17 +308,17 @@ namespace HerberLang {
                                    t.Value.type == "PARAMETER" ||
                                    t.Value.type == "NUMBER" ||
                                    t.Value.type == "FUNCTION")) {
-                    return new Next(op, node, parseNext());
+                    return new NextNode(op, node, parseNext());
                 }
                 if (op != null) {
                     var msg = string.Format("Unexpected character '{0}'.", op);
                     throw new LanguageError(msg, t.Value.line, t.Value.column + 1);
                 }
             }
-            return new Next(node);
+            return new NextNode(node);
         }
 
-        public Number parseNumer() {
+        public NumberNode parseNumer() {
             Token? t = peek();
 
             var sign = 1;
@@ -332,7 +332,7 @@ namespace HerberLang {
 
             consume("NUMBER");
 
-            return new Number(numer * sign);
+            return new NumberNode(numer * sign);
 
         }
     }

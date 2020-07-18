@@ -6,9 +6,9 @@ namespace HerberLang {
 
     public class Context {
         public Stack<StackFrame> stack;
-        public Dictionary<string, FunctionDefinition> functionDefinitions;
+        public Dictionary<string, FunctionDefinitionNode> functionDefinitions;
 
-        public Context(Dictionary<string, FunctionDefinition> definitions) {
+        public Context(Dictionary<string, FunctionDefinitionNode> definitions) {
             this.stack = new Stack<StackFrame>();
             this.stack.Push(new StackFrame());
 
@@ -45,13 +45,13 @@ namespace HerberLang {
         }
     }
 
-    public class Program : INode {
+    public class ProgramNode : INode {
 
-        public Dictionary<string, FunctionDefinition> definitions;
+        public Dictionary<string, FunctionDefinitionNode> definitions;
 
-        public Next next;
+        public NextNode next;
 
-        public Program(Dictionary<string, FunctionDefinition> definitions, Next next) {
+        public ProgramNode(Dictionary<string, FunctionDefinitionNode> definitions, NextNode next) {
             this.definitions = definitions;
             this.next = next;
         }
@@ -66,23 +66,23 @@ namespace HerberLang {
         }
     }
 
-    public class Step : INode {
+    public class StepNode : INode {
         public string step;
-        public ExecutionStep step_;
+        public Step step_;
 
-        public Step(Token token) {
+        public StepNode(Token token) {
             this.step = token.content;
             this.line = token.line;
             this.column = token.column;
 
             if (token.content == "s") {
-                this.step_ = ExecutionStep.STEP_FORWARD;
+                this.step_ = Step.STEP_FORWARD;
             } else
                if (token.content == "r") {
-                this.step_ = ExecutionStep.TURN_RIGHT;
+                this.step_ = Step.TURN_RIGHT;
             } else
                if (token.content == "l") {
-                this.step_ = ExecutionStep.TURN_LEFT;
+                this.step_ = Step.TURN_LEFT;
             } else {
                 throw new Exception("Some generic");
             }
@@ -94,38 +94,38 @@ namespace HerberLang {
         }
     }
 
-    public class FunctionCall : INode {
+    public class FunctionCallNode : INode {
 
         public string name;
         public int durability;
         public bool durabilitySet;
         public List<INode> arguments;
 
-        public FunctionCall(string name, List<INode> codeArguments, int line, int column) {
+        public FunctionCallNode(string name, List<INode> codeArguments, int line, int column) {
             this.name = name;
             this.arguments = codeArguments;
             this.line = line;
             this.column = column;
         }
-        public FunctionCall(string name, List<INode> arguments) {
+        public FunctionCallNode(string name, List<INode> arguments) {
             this.name = name;
             this.arguments = arguments;
             this.line = 0;
             this.column = 0;
         }
-        public FunctionCall(string name) {
+        public FunctionCallNode(string name) {
             this.name = name;
             this.arguments = new List<INode>();
             this.line = 0;
             this.column = 0;
         }
-        public FunctionCall(Token token, List<INode> arguments) {
+        public FunctionCallNode(Token token, List<INode> arguments) {
             this.name = token.content;
             this.arguments = arguments;
             this.line = token.line;
             this.column = token.column;
         }
-        public FunctionCall(Token token, List<INode> arguments, int durability, bool durabilitySet) {
+        public FunctionCallNode(Token token, List<INode> arguments, int durability, bool durabilitySet) {
             this.name = token.content;
             this.arguments = arguments;
             this.line = token.line;
@@ -157,12 +157,12 @@ namespace HerberLang {
 
             for (int i = 0; i < definition.parameters.Count; i++) {
                 var functionParameter = definition.parameters[i];
-                var name = (functionParameter as FunctionParameter).name;
+                var name = (functionParameter as FunctionParameterNode).name;
 
                 var argument = this.arguments[i].eval(context);
 
-                if (argument is Number) {
-                    if ((argument as Number).value < 1) {
+                if (argument is NumberNode) {
+                    if ((argument as NumberNode).value < 1) {
                         return null;
                     }
                 }
@@ -204,25 +204,25 @@ namespace HerberLang {
         }
     }
 
-    public class FunctionDefinition : INode {
+    public class FunctionDefinitionNode : INode {
         public string name;
 
-        public Code code;
-        public Next next;
+        public CodeNode code;
+        public NextNode next;
         public List<INode> parameters;
 
-        public FunctionDefinition(string name, List<INode> parameters, Code code) {
+        public FunctionDefinitionNode(string name, List<INode> parameters, CodeNode code) {
             this.name = name;
             this.code = code;
             this.parameters = parameters;
         }
-        public FunctionDefinition(string name, List<INode> parameters, Next next) {
+        public FunctionDefinitionNode(string name, List<INode> parameters, NextNode next) {
             this.name = name;
             this.parameters = parameters;
             this.next = next;
         }
 
-        public FunctionDefinition(Token token, List<INode> parameters, Code code) {
+        public FunctionDefinitionNode(Token token, List<INode> parameters, CodeNode code) {
             this.name = token.content;
             this.line = token.line;
             this.column = token.column;
@@ -230,7 +230,7 @@ namespace HerberLang {
             this.parameters = parameters;
         }
 
-        public FunctionDefinition(Token token, List<INode> parameters, Next next) {
+        public FunctionDefinitionNode(Token token, List<INode> parameters, NextNode next) {
             this.name = token.content;
             this.line = token.line;
             this.column = token.column;
@@ -242,29 +242,29 @@ namespace HerberLang {
             return string.Format("Definition({0})", name);
         }
     }
-    public class FunctionParameter : INode {
+    public class FunctionParameterNode : INode {
         public string name;
 
-        public FunctionParameter(Token token) {
+        public FunctionParameterNode(Token token) {
             this.name = token.content;
             this.line = token.line;
             this.column = token.column;
         }
 
-        public FunctionParameter(string name) {
+        public FunctionParameterNode(string name) {
             this.name = name;
         }
 
     }
 
-    public class Code : INode {
+    public class CodeNode : INode {
         public List<INode> steps;
 
-        public Code(List<INode> steps) {
+        public CodeNode(List<INode> steps) {
             this.steps = steps;
         }
 
-        public Code() {
+        public CodeNode() {
             this.steps = new List<INode>();
         }
 
@@ -273,14 +273,14 @@ namespace HerberLang {
             var steps = new List<INode>();
             foreach (var step in this.steps) {
 
-                if (step is FunctionCall || step is Variable) {
-                    var code = step.eval(context) as Code;
+                if (step is FunctionCallNode || step is VariableNode) {
+                    var code = step.eval(context) as CodeNode;
                     steps.AddRange(code.steps);
                 } else {
                     steps.Add(step.eval(context));
                 }
             }
-            return new Code(steps);
+            return new CodeNode(steps);
         }
 
         public override string ToString() {
@@ -295,26 +295,26 @@ namespace HerberLang {
         }
     }
 
-    public class Next : INode {
+    public class NextNode : INode {
         public INode node;
         public string op;
-        public Next next;
+        public NextNode next;
 
-        public Next(string op, INode node, Next next) {
+        public NextNode(string op, INode node, NextNode next) {
             this.op = op;
             this.node = node;
             this.next = next;
         }
 
-        public Next(INode node, Next next) {
+        public NextNode(INode node, NextNode next) {
             this.node = node;
             this.next = next;
         }
 
-        public Next() {
+        public NextNode() {
         }
 
-        public Next(INode node) {
+        public NextNode(INode node) {
             this.node = node;
         }
 
@@ -324,8 +324,8 @@ namespace HerberLang {
 
         public override INode eval(Context context = null) {
             INode left;
-            if (this.node is Step) {
-                left = new Code(new List<INode>() { this.node.eval(context) });
+            if (this.node is StepNode) {
+                left = new CodeNode(new List<INode>() { this.node.eval(context) });
             } else {
                 left = this.node.eval(context);
             }
@@ -347,21 +347,21 @@ namespace HerberLang {
                 throw new LanguageError("Bad operation", right.line, right.column);
             }
 
-            if (right is Number) {
-                int leftValue = ((Number)left).value;
-                int rightValue = ((Number)right).value;
+            if (right is NumberNode) {
+                int leftValue = ((NumberNode)left).value;
+                int rightValue = ((NumberNode)right).value;
 
                 if (op == "+") {
-                    return new Number(leftValue + rightValue);
+                    return new NumberNode(leftValue + rightValue);
                 }
 
                 if (op == "-") {
-                    return new Number(leftValue - rightValue);
+                    return new NumberNode(leftValue - rightValue);
                 }
             }
 
-            if (right is Code) {
-                (left as Code).steps.AddRange((right as Code).steps);
+            if (right is CodeNode) {
+                (left as CodeNode).steps.AddRange((right as CodeNode).steps);
                 return left;
             }
 
@@ -369,14 +369,14 @@ namespace HerberLang {
         }
     }
 
-    public class Number : INode {
+    public class NumberNode : INode {
         public int value;
 
-        public Number(int value) {
+        public NumberNode(int value) {
             this.value = value;
         }
 
-        public Number(Token token) {
+        public NumberNode(Token token) {
             this.value = Int32.Parse(token.content);
             this.line = token.line;
             this.column = token.column;
@@ -387,14 +387,14 @@ namespace HerberLang {
         }
     }
 
-    public class Variable : INode {
+    public class VariableNode : INode {
         public string name;
 
-        public Variable(string name) {
+        public VariableNode(string name) {
             this.name = name;
         }
 
-        public Variable(Token token) {
+        public VariableNode(Token token) {
             this.name = token.content;
             this.line = token.line;
             this.column = token.column;
