@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-using HerberLanguage;
+using HerberLang;
 
 namespace HerbertLang.Tests {
     public class TestsLexer {

@@ -1,6 +1,6 @@
 using Xunit;
 
-using HerberLanguage;
+using HerberLang;
 using System.Collections.Generic;
 
 namespace HerbertLang.Tests {

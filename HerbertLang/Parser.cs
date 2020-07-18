@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace HerberLanguage {
+namespace HerberLang {
     public class Parser {
 
         public static INode parse(List<Token> tokens) {

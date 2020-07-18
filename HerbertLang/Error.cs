@@ -1,6 +1,6 @@
 using System;
 
-namespace HerberLanguage {
+namespace HerberLang {
 
     // TODO: 
     // We can change errors to not have strings being passed in the consturctor.

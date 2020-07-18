@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace HerberLanguage {
+namespace HerberLang {
 
     public enum Tile {
         PLAYER_TOP=0,
@@ -27,17 +27,6 @@ namespace HerberLanguage {
 
         public List<ExecutionStep> steps;
         public string code;
-
-        public Solution(List<ExecutionStep> steps) {
-            this.success = true;
-            this.steps = steps;
-        }
-
-        public Solution(bool success, List<ExecutionStep> steps, LanguageError error) {
-            this.success = success;
-            this.steps = steps;
-            this.error = error;
-        }
 
         public Solution(bool success, List<ExecutionStep> steps, string code) {
             this.success = success;

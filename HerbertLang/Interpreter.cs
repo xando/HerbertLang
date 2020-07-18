@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace HerberLanguage
+namespace HerberLang
 {
     public static class Interpreter
     {

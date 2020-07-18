@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using HerberLanguage;
+using HerberLang;
 
 
 public class Herbert

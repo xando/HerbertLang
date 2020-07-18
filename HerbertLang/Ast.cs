@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace HerberLanguage {
+namespace HerberLang {
 
     public class Context {
         public Stack<StackFrame> stack;
