@@ -21,8 +21,6 @@ namespace HerberLanguage {
         STEP_BAD,
     };
 
-    // public Dictionary<myComplex, int> myMap = new Dictionary<myComplex, int>();
-
     public class Solution {
         public bool success = false;
         public LanguageError error;
