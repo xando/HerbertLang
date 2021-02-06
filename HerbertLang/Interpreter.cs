@@ -5,11 +5,17 @@ using System.Text;
 namespace HerberLang {
     public static class Interpreter {
 
-        public static List<Step> evalToCode(string program) {
+        private static CodeNode eval(string program) {
+
             var tokens = Lexer.tokenize(program);
             var ast = Parser.parse(tokens);
 
-            var code = ast.eval() as CodeNode;
+            return ast.eval() as CodeNode;
+        }
+
+        public static List<Step> evalToCode(string program) {
+            var code = Interpreter.eval(program);
+
             var steps = new List<Step>();
 
             if (code == null) return steps;
@@ -23,10 +29,7 @@ namespace HerberLang {
 
         public static string evalToString(string program) {
             try {
-                var tokens = Lexer.tokenize(program);
-                var ast = Parser.parse(tokens);
-
-                var code = ast.eval() as CodeNode;
+                var code = Interpreter.eval(program);
 
                 if (code == null) return "";
 
@@ -37,7 +40,6 @@ namespace HerberLang {
                         steps.Append(step.step);
                     }
                 }
-
                 return steps.ToString();
 
             } catch (LanguageError ex) {

@@ -3,6 +3,7 @@ using Xunit;
 using HerberLang;
 using System.Collections.Generic;
 
+
 namespace HerbertLang.Tests {
     public class TestInterpter {
 
@@ -43,9 +44,9 @@ namespace HerbertLang.Tests {
         public void EvalProgram_1() {
 
             var code = @"
-rr
-lsr
-";
+            rr
+            lsr
+            ";
             Assert.Equal(
                 "rrlsr",
                 Interpreter.evalToString(code)
@@ -56,8 +57,8 @@ lsr
         [Fact]
         public void EvalProgram_2() {
             var code = @"
-f:rr
-fsss
+            f:rr
+            fsss
             ";
             Assert.Equal(
                 "rrsss",
@@ -69,8 +70,8 @@ fsss
         [Fact]
         public void EvalProgram_21() {
             var h = @"
-f(A):A
-f(ss)";
+            f(A):A
+            f(ss)";
 
             Assert.Equal("ss",
             Interpreter.evalToString(h)
@@ -81,8 +82,8 @@ f(ss)";
         [Fact]
         public void EvalProgram_22() {
             var h = @"
-f(A, B):AB
-f(ss, rr)";
+            f(A, B):AB
+            f(ss, rr)";
 
             Assert.Equal("ssrr", Interpreter.evalToString(h));
         }
@@ -92,9 +93,9 @@ f(ss, rr)";
         public void EvalProgram_3() {
 
             var h = @"
-z:ll
-f:rrz
-fsss";
+            z:ll
+            f:rrz
+            fsss";
 
             Assert.Equal("rrllsss", Interpreter.evalToString(h));
         }
@@ -103,8 +104,8 @@ fsss";
         public void EvalProgram_4() {
 
             var h = @"
-f(A):A
-f(ss)rr";
+            f(A):A
+            f(ss)rr";
 
             Assert.Equal("ssrr", Interpreter.evalToString(h));
         }
@@ -113,8 +114,8 @@ f(ss)rr";
         public void EvalProgram_5() {
 
             var h = @"
-f(A,B):AB
-f(ss,ll)rr";
+            f(A,B):AB
+            f(ss,ll)rr";
 
             Assert.Equal("ssllrr", Interpreter.evalToString(h));
         }
@@ -133,9 +134,9 @@ f(ss,ll)rr";
         [Fact]
         public void EvalProgram_7() {
             var h = @"
-z:sss
-f(A):lA
-f(z)rr";
+            z:sss
+            f(A):lA
+            f(z)rr";
 
             Assert.Equal("lsssrr", Interpreter.evalToString(h));
         }
@@ -143,9 +144,9 @@ f(z)rr";
         [Fact]
         public void EvalProgram_8() {
             var h = @"
-z:sss
-f(A):lA
-f(ss)r";
+            z:sss
+            f(A):lA
+            f(ss)r";
 
             Assert.Equal("lssr", Interpreter.evalToString(h));
         }
@@ -154,16 +155,16 @@ f(ss)r";
         [Fact]
         public void EvalProgram_10() {
             var h = @"
-f:f
-f";
+            f:f
+            f";
 
             Assert.Equal("", Interpreter.evalToString(h));
         }
         [Fact]
         public void EvalProgram_11() {
             var h = @"
-f(A):f(A)s
-f(0)";
+            f(A):f(A)s
+            f(0)";
 
             Assert.Equal("", Interpreter.evalToString(h));
         }
@@ -171,8 +172,8 @@ f(0)";
         [Fact]
         public void EvalProgram_12() {
             var h = @"
-f(A):sf(A-1)
-f(2)";
+            f(A):sf(A-1)
+            f(2)";
 
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
@@ -180,8 +181,8 @@ f(2)";
         [Fact]
         public void EvalProgram_13() {
             var h = @"
-f(A):f(A-1)s
-f(2)";
+            f(A):f(A-1)s
+            f(2)";
 
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
@@ -189,8 +190,8 @@ f(2)";
         [Fact]
         public void EvalProgram_14() {
             var h = @"
-f(A):ss
-f(2)";
+            f(A):ss
+            f(2)";
 
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
@@ -199,9 +200,9 @@ f(2)";
         public void EvalProgram_15() {
             var h = @"
 
-sss
+            sss
 
-";
+            ";
 
             Assert.Equal("sss", Interpreter.evalToString(h));
         }
@@ -209,10 +210,9 @@ sss
         [Fact]
         public void EvalProgram_16() {
             var h = @"
-f:f";
+            f:f";
 
             Assert.Equal("", Interpreter.evalToString(h));
         }
-
     }
 }

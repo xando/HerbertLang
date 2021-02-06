@@ -2,9 +2,9 @@ using System;
 
 namespace HerberLang {
 
-    // TODO: 
+    // TODO:
     // We can change errors to not have strings being passed in the consturctor.
-    // Just define them here as format. This should help with testing. 
+    // Just define them here as format. This should help with testing.
 
     public class LanguageError : Exception {
         public int line = 0;
