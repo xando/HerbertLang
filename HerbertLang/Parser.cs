@@ -159,8 +159,6 @@ namespace HerberLang {
 
             consume("FUNCTION");
 
-            var functionToken = t.Value;
-
             t = peek();
 
             if (t.HasValue && (
@@ -202,8 +200,12 @@ namespace HerberLang {
                 consume(")");
             }
 
-            return new FunctionCallNode(functionToken, arguments,
-            durability, durabilitySet);
+            return new FunctionCallNode(
+                token,
+                arguments,
+                durability,
+                durabilitySet
+            );
         }
 
         public CodeNode parseCode() {

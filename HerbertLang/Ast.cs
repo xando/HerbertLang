@@ -6,13 +6,13 @@ namespace HerberLang {
 
     public class Context {
         public Stack<StackFrame> stack;
-        public Dictionary<string, FunctionDefinitionNode> functionDefinitions;
+        public Dictionary<string, FunctionDefinitionNode> definitions;
 
         public Context(Dictionary<string, FunctionDefinitionNode> definitions) {
             this.stack = new Stack<StackFrame>();
             this.stack.Push(new StackFrame());
 
-            this.functionDefinitions = definitions;
+            this.definitions = definitions;
         }
     }
 
@@ -23,11 +23,6 @@ namespace HerberLang {
 
         public StackFrame(Dictionary<string, INode> variables, int durability) {
             this.variables = variables;
-            this.durability = durability;
-        }
-
-        public StackFrame(int durability) {
-            this.variables = new Dictionary<string, INode>();
             this.durability = durability;
         }
 
@@ -100,31 +95,7 @@ namespace HerberLang {
         public int durability;
         public bool durabilitySet;
         public List<INode> arguments;
-
-        public FunctionCallNode(string name, List<INode> codeArguments, int line, int column) {
-            this.name = name;
-            this.arguments = codeArguments;
-            this.line = line;
-            this.column = column;
-        }
-        public FunctionCallNode(string name, List<INode> arguments) {
-            this.name = name;
-            this.arguments = arguments;
-            this.line = 0;
-            this.column = 0;
-        }
-        public FunctionCallNode(string name) {
-            this.name = name;
-            this.arguments = new List<INode>();
-            this.line = 0;
-            this.column = 0;
-        }
-        public FunctionCallNode(Token token, List<INode> arguments) {
-            this.name = token.content;
-            this.arguments = arguments;
-            this.line = token.line;
-            this.column = token.column;
-        }
+        
         public FunctionCallNode(Token token, List<INode> arguments, int durability, bool durabilitySet) {
             this.name = token.content;
             this.arguments = arguments;
@@ -136,12 +107,12 @@ namespace HerberLang {
         }
         public override INode eval(Context context = null) {
 
-            if (!context.functionDefinitions.ContainsKey(this.name)) {
+            if (!context.definitions.ContainsKey(this.name)) {
                 var msg = string.Format("Function '{0}' is undefined", this.name);
                 throw new LanguageError(msg, this);
             }
 
-            var definition = context.functionDefinitions[this.name];
+            var definition = context.definitions[this.name];
 
             if (definition.parameters.Count > this.arguments.Count) {
                 var msg = string.Format("Funtion '{0}' has missing argument", this.name);
@@ -168,7 +139,6 @@ namespace HerberLang {
                 }
                 variables.Add(name, argument);
             }
-
 
             int callDurability;
 
@@ -211,25 +181,6 @@ namespace HerberLang {
         public NextNode next;
         public List<INode> parameters;
 
-        public FunctionDefinitionNode(string name, List<INode> parameters, CodeNode code) {
-            this.name = name;
-            this.code = code;
-            this.parameters = parameters;
-        }
-        public FunctionDefinitionNode(string name, List<INode> parameters, NextNode next) {
-            this.name = name;
-            this.parameters = parameters;
-            this.next = next;
-        }
-
-        public FunctionDefinitionNode(Token token, List<INode> parameters, CodeNode code) {
-            this.name = token.content;
-            this.line = token.line;
-            this.column = token.column;
-            this.code = code;
-            this.parameters = parameters;
-        }
-
         public FunctionDefinitionNode(Token token, List<INode> parameters, NextNode next) {
             this.name = token.content;
             this.line = token.line;
@@ -251,10 +202,6 @@ namespace HerberLang {
             this.column = token.column;
         }
 
-        public FunctionParameterNode(string name) {
-            this.name = name;
-        }
-
     }
 
     public class CodeNode : INode {
@@ -262,10 +209,6 @@ namespace HerberLang {
 
         public CodeNode(List<INode> steps) {
             this.steps = steps;
-        }
-
-        public CodeNode() {
-            this.steps = new List<INode>();
         }
 
         public override INode eval(Context context = null) {
@@ -304,14 +247,6 @@ namespace HerberLang {
             this.op = op;
             this.node = node;
             this.next = next;
-        }
-
-        public NextNode(INode node, NextNode next) {
-            this.node = node;
-            this.next = next;
-        }
-
-        public NextNode() {
         }
 
         public NextNode(INode node) {
@@ -389,10 +324,6 @@ namespace HerberLang {
 
     public class VariableNode : INode {
         public string name;
-
-        public VariableNode(string name) {
-            this.name = name;
-        }
 
         public VariableNode(Token token) {
             this.name = token.content;
