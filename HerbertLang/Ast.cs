@@ -93,17 +93,17 @@ namespace HerberLang {
 
         public string name;
         public int durability;
-        public bool durabilitySet;
+        public bool durabilityOverwrite;
         public List<INode> arguments;
         
-        public FunctionCallNode(Token token, List<INode> arguments, int durability, bool durabilitySet) {
+        public FunctionCallNode(Token token, List<INode> arguments, int durability, bool durabilityOverwrite) {
             this.name = token.content;
             this.arguments = arguments;
             this.line = token.line;
             this.column = token.column;
 
             this.durability = durability;
-            this.durabilitySet = durabilitySet;
+            this.durabilityOverwrite = durabilityOverwrite;
         }
         public override INode eval(Context context = null) {
 
@@ -142,7 +142,7 @@ namespace HerberLang {
 
             int callDurability;
 
-            if (this.durabilitySet) {
+            if (this.durabilityOverwrite) {
                 callDurability = this.durability;
             } else {
 

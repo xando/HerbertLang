@@ -150,8 +150,8 @@ namespace HerberLang {
 
         public FunctionCallNode parseFunctionCall() {
             var arguments = new List<INode>();
-            bool durabilitySet = false;
             var durability = 1;
+            bool durabilityOverwrite = false;
 
             Token? t = peek();
 
@@ -166,7 +166,7 @@ namespace HerberLang {
                 t.Value.type == "+" ||
                 t.Value.type == "-")) {
                 if (t.Value.type == "=") {
-                    durabilitySet = true;
+                    durabilityOverwrite = true;
                     consume("=");
                     var number = parseNumer();
 
@@ -204,7 +204,7 @@ namespace HerberLang {
                 token,
                 arguments,
                 durability,
-                durabilitySet
+                durabilityOverwrite
             );
         }
 
