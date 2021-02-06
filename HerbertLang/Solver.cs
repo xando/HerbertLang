@@ -41,10 +41,11 @@ namespace HerberLang {
 
     public class Solver {
 
-        public static Solution solve(string codeInput, Tile[,] world) {
+        public static Solution Solve(string codeInput, Tile[,] world) {
 
             int direction = 0;
             int[] position = new int[2];
+
 
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
@@ -84,8 +85,6 @@ namespace HerberLang {
                     int[] nextPosition = new int[2];
 
                     position.CopyTo(nextPosition, 0);
-
-
                     if (direction == 0) {
                         nextPosition[0]++;
                     } else
@@ -129,7 +128,7 @@ namespace HerberLang {
             }
 
             return new Solution(
-                success, 
+                success,
                 solutionSteps, 
                 codeInput
             );

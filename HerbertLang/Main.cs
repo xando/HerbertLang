@@ -109,7 +109,7 @@ public class Herbert
             return;
         }
 
-        var solution = Solver.solve(code, world);
+        var solution = Solver.Solve(code, world);
 
         if (!solution.success) {
 

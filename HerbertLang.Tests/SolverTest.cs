@@ -18,7 +18,7 @@ namespace HerbertLang.Tests {
                 {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
             };
 
-            var solution = Solver.solve("sss", world);
+            var solution = Solver.Solve("sss", world);
 
             Assert.Equal(3, solution.steps.Count);
 
@@ -36,7 +36,7 @@ namespace HerbertLang.Tests {
                 {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
             };
 
-            var solution = Solver.solve("s", world);
+            var solution = Solver.Solve("s", world);
 
             Assert.Single(solution.steps);
 
