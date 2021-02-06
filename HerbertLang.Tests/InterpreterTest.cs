@@ -214,5 +214,17 @@ namespace HerbertLang.Tests {
 
             Assert.Equal("", Interpreter.evalToString(h));
         }
+
+        [Fact]
+        public void EvalProgram_Durability_1() {
+            
+            var h = @"
+            z:rr
+            f:ssf-1z-1
+            f=4";
+
+            Assert.Equal("ssssssssrrrrrr", Interpreter.evalToString(h));
+        }
+
     }
 }

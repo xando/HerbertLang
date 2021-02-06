@@ -261,6 +261,7 @@ namespace HerberLang {
                 consume("PARAMETER");
             } else
             if (t.Value.type == "NUMBER") {
+                // TODO(seba) Are we expecting numbers in the program body?
                 node = new NumberNode(t.Value);
                 consume("NUMBER");
             } else
