@@ -72,7 +72,7 @@ namespace HerbertLang.Tests {
 
             LanguageError ex = Assert.Throws<LanguageError>(
                 () => parser.parseNext());
-            
+
             Assert.Equal(1, ex.line);
             Assert.Equal(2, ex.column);
         }

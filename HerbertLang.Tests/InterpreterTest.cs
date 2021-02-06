@@ -60,7 +60,7 @@ f:rr
 fsss
             ";
             Assert.Equal(
-                "rrsss", 
+                "rrsss",
                 Interpreter.evalToString(code)
             );
 
@@ -77,7 +77,7 @@ f(ss)";
             );
         }
 
-        
+
         [Fact]
         public void EvalProgram_22() {
             var h = @"
@@ -95,7 +95,7 @@ f(ss, rr)";
 z:ll
 f:rrz
 fsss";
-            
+
             Assert.Equal("rrllsss", Interpreter.evalToString(h));
         }
 
@@ -105,7 +105,7 @@ fsss";
             var h = @"
 f(A):A
 f(ss)rr";
-            
+
             Assert.Equal("ssrr", Interpreter.evalToString(h));
         }
 
@@ -126,7 +126,7 @@ f(ss,ll)rr";
             z:sss
             f(A,B):AzzzB
             f(ss,ll)rr";
-            
+
             Assert.Equal("sssssssssssllrr", Interpreter.evalToString(h));
         }
 
@@ -146,7 +146,7 @@ f(z)rr";
 z:sss
 f(A):lA
 f(ss)r";
-            
+
             Assert.Equal("lssr", Interpreter.evalToString(h));
         }
 
@@ -156,7 +156,7 @@ f(ss)r";
             var h = @"
 f:f
 f";
-            
+
             Assert.Equal("", Interpreter.evalToString(h));
         }
         [Fact]
@@ -164,7 +164,7 @@ f";
             var h = @"
 f(A):f(A)s
 f(0)";
-            
+
             Assert.Equal("", Interpreter.evalToString(h));
         }
 
@@ -173,28 +173,28 @@ f(0)";
             var h = @"
 f(A):sf(A-1)
 f(2)";
-            
+
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
-        
+
         [Fact]
         public void EvalProgram_13() {
             var h = @"
 f(A):f(A-1)s
 f(2)";
-            
+
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
-        
+
         [Fact]
         public void EvalProgram_14() {
             var h = @"
 f(A):ss
 f(2)";
-            
+
             Assert.Equal("ss", Interpreter.evalToString(h));
         }
-        
+
         [Fact]
         public void EvalProgram_15() {
             var h = @"
@@ -202,15 +202,15 @@ f(2)";
 sss
 
 ";
-            
+
             Assert.Equal("sss", Interpreter.evalToString(h));
         }
-        
+
         [Fact]
         public void EvalProgram_16() {
             var h = @"
 f:f";
-            
+
             Assert.Equal("", Interpreter.evalToString(h));
         }
 

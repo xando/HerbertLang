@@ -17,7 +17,7 @@ namespace HerbertLang.Tests {
             var tokens = Lexer.tokenize("srl");
 
             Assert.Equal(3, tokens.Count);
-            
+
             Assert.Equal("STEP", tokens[0].type);
             Assert.Equal("STEP", tokens[1].type);
             Assert.Equal("STEP", tokens[2].type);
@@ -34,7 +34,7 @@ namespace HerbertLang.Tests {
             Assert.Equal("STEP", tokens[3].type);
             Assert.Equal("STEP", tokens[4].type);
             Assert.Equal("NEW_LINE", tokens[5].type);
-            Assert.Equal("FUNCTION", tokens[6].type);;
+            Assert.Equal("FUNCTION", tokens[6].type); ;
             Assert.Equal("STEP", tokens[7].type);
             Assert.Equal("STEP", tokens[8].type);
         }
