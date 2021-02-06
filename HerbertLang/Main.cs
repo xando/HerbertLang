@@ -2,8 +2,7 @@ using System;
 using HerberLang;
 
 
-public class Herbert
-{
+public class Herbert {
     static string[] args;
     static int total = 0;
 
@@ -31,8 +30,8 @@ public class Herbert
         if (success) {
             for (int i = 0; i < expected.Length; i++) {
                 if (output[i] != expected[i]) {
-                     success = false;
-                     break;
+                    success = false;
+                    break;
                 }
             }
         }
@@ -57,13 +56,10 @@ public class Herbert
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write("\n### {0}: ", name);
 
-        if (success)
-        {
+        if (success) {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("PASSED");
-        }
-        else
-        {
+        } else {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("FAILED");
         }
@@ -97,8 +93,7 @@ public class Herbert
         }
 
         total++;
-        if (success)
-        {
+        if (success) {
             passed++;
         }
 
@@ -135,14 +130,12 @@ public class Herbert
         }
 
         total++;
-        if (solution.success)
-        {
+        if (solution.success) {
             passed++;
         }
     }
 
-    static public void Main(string[] args)
-    {
+    static public void Main(string[] args) {
         Herbert.args = args;
 
         solve("solve no items",
@@ -207,7 +200,7 @@ public class Herbert
             Step.STEP_FORWARD
         });
 
-        check("function 1", "f:s", new Step[] {});
+        check("function 1", "f:s", new Step[] { });
         check("function 2", "f:s\nf", new Step[] {
             Step.STEP_FORWARD });
         check("function 3", "f:s\nf", new Step[] {
@@ -231,9 +224,9 @@ public class Herbert
             Step.TURN_RIGHT
         });
 
-        check("recursion load = 0", "f:sf\nf=0", new Step[]{});
-        check("recursion load - 1", "f:sf\nf-1", new Step[]{});
-        check("recursion load =- 1", "f:sf\nf=-1", new Step[]{});
+        check("recursion load = 0", "f:sf\nf=0", new Step[] { });
+        check("recursion load - 1", "f:sf\nf-1", new Step[] { });
+        check("recursion load =- 1", "f:sf\nf=-1", new Step[] { });
         check("recursion load = 1", "f:sf-1\nf=1", new Step[]{
             Step.STEP_FORWARD
         });

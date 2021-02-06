@@ -129,7 +129,7 @@ namespace HerberLang {
 
             return new Solution(
                 success,
-                solutionSteps, 
+                solutionSteps,
                 codeInput
             );
 

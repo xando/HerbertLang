@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace HerbertLang.Tests {
 
     // public class NextTest {
-        
+
     //     [Fact]
     //     public void NextSumTest() {
     //         var next = new Next("+", new Number(6), new Next(new Number(6)));
