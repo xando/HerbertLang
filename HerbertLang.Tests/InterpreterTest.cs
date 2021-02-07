@@ -14,7 +14,7 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void Test_ToString_Error() {
-            Assert.Equal("1:1 Function 'f' is undefined", Interpreter.evalToString("fss"));
+            Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString("fss"));
         }
 
 
@@ -28,12 +28,15 @@ namespace HerbertLang.Tests {
         }
 
         [Fact]
-        public void Test_ToCode_Exception() {
+        public void TestUndefinedFunction() {
 
-            LanguageError ex = Assert.Throws<LanguageError>(() => Interpreter.evalToCode("f"));
+            var h = "f";
+
+            LanguageError ex = Assert.Throws<LanguageError>(() => Interpreter.evalToCode(h));
 
             Assert.Equal(1, ex.line);
             Assert.Equal(1, ex.column);
+            System.Console.WriteLine(ex.Message);
         }
 
     }

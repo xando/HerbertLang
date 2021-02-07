@@ -85,7 +85,7 @@ namespace HerberLang {
         }
 
         public override string ToString() {
-            return string.Format("Step({0})", step);
+            return $"Step({step})";
         }
     }
 
@@ -108,20 +108,29 @@ namespace HerberLang {
         public override INode eval(Context context = null) {
 
             if (!context.definitions.ContainsKey(this.name)) {
-                var msg = string.Format("Function '{0}' is undefined", this.name);
-                throw new LanguageError(msg, this);
+
+                throw new LanguageError(
+                    $"Function '{this.name}' is undefined.", this
+                );
+
             }
 
             var definition = context.definitions[this.name];
 
             if (definition.parameters.Count > this.arguments.Count) {
-                var msg = string.Format("Funtion '{0}' has missing argument", this.name);
-                throw new LanguageError(msg, this);
+
+                throw new LanguageError(
+                    $"Funtion '{this.name}' has missing argument", this
+                );
+
             }
 
             if (this.arguments.Count > definition.parameters.Count) {
-                var msg = string.Format("Funtion '{0}' has too many arguments", this.name);
-                throw new LanguageError(msg, this);
+
+                throw new LanguageError(
+                    $"Funtion '{this.name}' has too many arguments", this
+                );
+
             }
 
             var variables = new Dictionary<string, INode>();
@@ -170,7 +179,7 @@ namespace HerberLang {
         }
 
         public override string ToString() {
-            return string.Format("FunctionCall({0})", name);
+            return $"FunctionCall({name})";
         }
     }
 
@@ -190,7 +199,7 @@ namespace HerberLang {
         }
 
         public override string ToString() {
-            return string.Format("Definition({0})", name);
+            return $"Definition({name})";
         }
     }
     public class FunctionParameterNode : INode {
@@ -254,7 +263,7 @@ namespace HerberLang {
         }
 
         public override string ToString() {
-            return string.Format("Expresion({left} {op} {right})", node, op, next);
+            return $"Expresion({node} {op} {next})";
         }
 
         public override INode eval(Context context = null) {
@@ -318,7 +327,7 @@ namespace HerberLang {
         }
 
         public override string ToString() {
-            return string.Format("Number({0})", value);
+            return $"Number({value})";
         }
     }
 
@@ -336,8 +345,7 @@ namespace HerberLang {
             if (variables.ContainsKey(this.name)) {
                 return variables[this.name].eval(context);
             }
-            var msg = string.Format("Variable '{0}' is undefined", this.name);
-            throw new LanguageError(msg, this);
+            throw new LanguageError($"Variable '{this.name}' is undefined", this);
         }
     }
 }
