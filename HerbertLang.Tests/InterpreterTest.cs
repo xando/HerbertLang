@@ -20,7 +20,7 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void Test_ToCode() {
-            Assert.Equal(new List<Step>(){
+            Assert.Equal(new List<string>(){
                 Step.STEP_FORWARD,
                 Step.STEP_FORWARD,
                 Step.STEP_FORWARD,

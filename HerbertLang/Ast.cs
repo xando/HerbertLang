@@ -63,7 +63,7 @@ namespace HerberLang {
 
     public class StepNode : INode {
         public string step;
-        public Step step_;
+        public String step_;
 
         public StepNode(Token token) {
             this.step = token.content;

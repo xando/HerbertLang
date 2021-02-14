@@ -13,10 +13,10 @@ namespace HerberLang {
             return ast.eval() as CodeNode;
         }
 
-        public static List<Step> evalToCode(string program) {
+        public static List<string> evalToCode(string program) {
             var code = Interpreter.eval(program);
 
-            var steps = new List<Step>();
+            var steps = new List<string>();
 
             if (code == null) return steps;
 

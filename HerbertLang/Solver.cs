@@ -13,21 +13,21 @@ namespace HerberLang {
         ITEM = 9,
     }
 
-    public enum Step {
-        TURN_RIGHT,
-        TURN_LEFT,
-        STEP_FORWARD,
-        STEP_BAD,
-    };
+    public static class Step {
+        public const string TURN_RIGHT = "r";
+        public const string TURN_LEFT = "l";
+        public const string STEP_FORWARD = "s";
+        public const string STEP_BAD = "x";
+    }
 
     public class Solution {
         public bool success = false;
         public LanguageError error;
 
-        public List<Step> steps;
+        public List<string> steps;
         public string code;
 
-        public Solution(bool success, List<Step> steps, string code) {
+        public Solution(bool success, List<string> steps, string code) {
             this.success = success;
             this.steps = steps;
             this.code = code;
@@ -60,14 +60,14 @@ namespace HerberLang {
                 }
             }
 
-            List<Step> interpreterSteps;
+            List<string> interpreterSteps;
             try {
                 interpreterSteps = Interpreter.evalToCode(codeInput);
             } catch (LanguageError error) {
                 return new Solution(error);
             }
 
-            List<Step> solutionSteps = new List<Step>();
+            List<string> solutionSteps = new List<string>();
 
             foreach (var step in interpreterSteps) {
                 if (step == Step.TURN_RIGHT) {
