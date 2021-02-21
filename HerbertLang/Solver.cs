@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace HerberLang {
 
-    public enum Tile {
-        PLAYER_TOP = 0,
-        PLAYER_RIGHT = 1,
-        PLAYER_BOTTOM = 2,
-        PLAYER_LEFT = 3,
-        SPACE = 4,
-        OBSTACLE = 5,
-        ITEM = 9,
+    public static class Tile {
+        public const string PLAYER_UP = "0";
+        public const string PLAYER_RIGHT = "1";
+        public const string PLAYER_DOWN = "2";
+        public const string PLAYER_LEFT = "3";
+        public const string OBSTACLE = "x";
+        public const string SPACE = " ";
+        public const string ITEM = "*";
     }
 
     public static class Step {
@@ -41,7 +41,7 @@ namespace HerberLang {
 
     public class Solver {
 
-        public static Solution Solve(string codeInput, Tile[,] world) {
+        public static Solution Solve(string codeInput, string[,] world) {
 
             int direction = 0;
             int[] position = new int[2];
@@ -49,11 +49,11 @@ namespace HerberLang {
 
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
-                    if (world[i, j] == Tile.PLAYER_TOP ||
+                    if (world[i, j] == Tile.PLAYER_UP ||
                         world[i, j] == Tile.PLAYER_RIGHT ||
-                        world[i, j] == Tile.PLAYER_BOTTOM ||
+                        world[i, j] == Tile.PLAYER_DOWN ||
                         world[i, j] == Tile.PLAYER_LEFT) {
-                        direction = (int)world[i, j];
+                        direction = int.Parse(world[i, j]);
                         position[0] = i;
                         position[1] = j;
                     }

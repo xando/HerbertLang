@@ -12,10 +12,10 @@ namespace HerbertLang.Tests {
         [Fact]
         public void solve_1() {
 
-            Tile[,] world = {
+            string[,] world = {
                 {Tile.OBSTACLE, Tile.ITEM,       Tile.OBSTACLE},
                 {Tile.OBSTACLE, Tile.SPACE,      Tile.OBSTACLE},
-                {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
+                {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
             };
 
             var solution = Solver.Solve("sss", world);
@@ -30,10 +30,10 @@ namespace HerbertLang.Tests {
 
         [Fact]
         public void solve_2() {
-            Tile[,] world = {
+            string[,] world = {
                 {Tile.OBSTACLE, Tile.ITEM,       Tile.OBSTACLE},
                 {Tile.OBSTACLE, Tile.SPACE,      Tile.OBSTACLE},
-                {Tile.OBSTACLE, Tile.PLAYER_BOTTOM, Tile.OBSTACLE}
+                {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
             };
 
             var solution = Solver.Solve("s", world);

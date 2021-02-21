@@ -99,7 +99,7 @@ public class Herbert {
 
     }
 
-    public static void solve(string name, Tile[,] world, string code) {
+    public static void solve(string name, string[,] world, string code) {
         if (args.Length > 0 && args[0] != name) {
             return;
         }
@@ -111,18 +111,18 @@ public class Herbert {
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
 
-                    if (world[i, j] == Tile.PLAYER_TOP ||
+                    if (world[i, j] == Tile.PLAYER_UP ||
                         world[i, j] == Tile.PLAYER_RIGHT ||
-                        world[i, j] == Tile.PLAYER_BOTTOM ||
+                        world[i, j] == Tile.PLAYER_DOWN ||
                         world[i, j] == Tile.PLAYER_LEFT) {
-                        Console.Write(String.Format("{0} ", (int)world[i, j]));
+                        Console.Write($"{world[i, j]} ");
                     } else
                     if (world[i, j] == Tile.ITEM) {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(String.Format("{0} ", (char)world[i, j]));
+                        Console.Write($"{world[i, j]} ");
                         Console.ResetColor();
                     } else {
-                        Console.Write(String.Format("{0} ", (char)world[i, j]));
+                        Console.Write($"{world[i, j]} ");
                     }
                 }
                 Console.WriteLine("");
@@ -139,36 +139,36 @@ public class Herbert {
         Herbert.args = args;
 
         solve("solve no items",
-            new Tile[,] {
+            new string[,] {
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
-                {Tile.SPACE, Tile.PLAYER_TOP, Tile.SPACE},
+                {Tile.SPACE, Tile.PLAYER_UP, Tile.SPACE},
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
             },
             "s"
         );
 
         solve("solve step",
-            new Tile[,] {
+            new string[,] {
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
-                {Tile.SPACE, Tile.PLAYER_TOP, Tile.SPACE},
+                {Tile.SPACE, Tile.PLAYER_UP, Tile.SPACE},
                 {Tile.SPACE, Tile.ITEM, Tile.SPACE},
             },
             "s"
         );
 
         solve("solve step turn",
-            new Tile[,] {
+            new string[,] {
                 {Tile.SPACE, Tile.SPACE, Tile.SPACE},
-                {Tile.SPACE, Tile.PLAYER_TOP, Tile.SPACE},
+                {Tile.SPACE, Tile.PLAYER_UP, Tile.SPACE},
                 {Tile.ITEM, Tile.SPACE, Tile.SPACE},
             },
             "srs"
         );
 
         solve("solve step turn",
-            new Tile[,] {
+            new string[,] {
                 {Tile.ITEM, Tile.SPACE, Tile.ITEM},
-                {Tile.SPACE, Tile.PLAYER_TOP, Tile.SPACE},
+                {Tile.SPACE, Tile.PLAYER_UP, Tile.SPACE},
                 {Tile.ITEM, Tile.SPACE, Tile.ITEM},
             },
             "srsrssrssrss"
