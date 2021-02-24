@@ -8,12 +8,12 @@ public class Herbert {
 
     static int passed = 0;
 
-    static void check(string name, string program, String[] expected) {
+    static void check(string name, string program, char[] expected) {
         if (args.Length > 0 && args[0] != name) {
             return;
         }
 
-        var output = Interpreter.evalToCode(program).ToArray();
+        var output = Interpreter.evalToCode(program);
 
         int biggerSize;
         if (expected.Length > output.Length) {
@@ -36,8 +36,8 @@ public class Herbert {
             }
         }
 
-        var expectedAnnotated = new Tuple<bool, string>[expected.Length];
-        var outputAnnotated = new Tuple<bool, string>[biggerSize];
+        var expectedAnnotated = new Tuple<bool, char>[expected.Length];
+        var outputAnnotated = new Tuple<bool, char>[biggerSize];
 
         for (int i = 0; i < expected.Length; i++) {
             expectedAnnotated[i] = Tuple.Create(
@@ -174,15 +174,15 @@ public class Herbert {
             "srsrssrssrss"
         );
 
-        check("simple 1", "s", new string[] { Step.STEP_FORWARD });
+        check("simple 1", "s", new char[] { Step.STEP_FORWARD });
 
-        check("simple 2", "srl", new string[] {
+        check("simple 2", "srl", new char[] {
             Step.STEP_FORWARD,
             Step.TURN_RIGHT,
             Step.TURN_LEFT
         });
 
-        check("multiline 1", "srl\nsss", new string[] {
+        check("multiline 1", "srl\nsss", new char[] {
             Step.STEP_FORWARD,
             Step.TURN_RIGHT,
             Step.TURN_LEFT,
@@ -191,7 +191,7 @@ public class Herbert {
             Step.STEP_FORWARD
         });
 
-        check("multiline 2", "\nsss\nsss\n\n", new string[] {
+        check("multiline 2", "\nsss\nsss\n\n", new char[] {
             Step.STEP_FORWARD,
             Step.STEP_FORWARD,
             Step.STEP_FORWARD,
@@ -200,23 +200,23 @@ public class Herbert {
             Step.STEP_FORWARD
         });
 
-        check("function 1", "f:s", new string[] { });
-        check("function 2", "f:s\nf", new string[] {
+        check("function 1", "f:s", new char[] { });
+        check("function 2", "f:s\nf", new char[] {
             Step.STEP_FORWARD });
-        check("function 3", "f:s\nf", new string[] {
+        check("function 3", "f:s\nf", new char[] {
             Step.STEP_FORWARD });
-        check("function 4", "f:s\nff", new string[]{
+        check("function 4", "f:s\nff", new char[]{
             Step.STEP_FORWARD,
             Step.STEP_FORWARD
         });
 
-        check("function arguments", "f(A):AsA\nf(r)", new string[]{
+        check("function arguments", "f(A):AsA\nf(r)", new char[]{
             Step.TURN_RIGHT,
             Step.STEP_FORWARD,
             Step.TURN_RIGHT
         });
 
-        check("function arguments", "f(A, B):ABsBA\nf(r,l)", new string[]{
+        check("function arguments", "f(A, B):ABsBA\nf(r,l)", new char[]{
             Step.TURN_RIGHT,
             Step.TURN_LEFT,
             Step.STEP_FORWARD,
@@ -224,19 +224,19 @@ public class Herbert {
             Step.TURN_RIGHT
         });
 
-        check("recursion load = 0", "f:sf\nf=0", new string[] { });
-        check("recursion load - 1", "f:sf\nf-1", new string[] { });
-        check("recursion load =- 1", "f:sf\nf=-1", new string[] { });
-        check("recursion load = 1", "f:sf-1\nf=1", new string[]{
+        check("recursion load = 0", "f:sf\nf=0", new char[] { });
+        check("recursion load - 1", "f:sf\nf-1", new char[] { });
+        check("recursion load =- 1", "f:sf\nf=-1", new char[] { });
+        check("recursion load = 1", "f:sf-1\nf=1", new char[]{
             Step.STEP_FORWARD
         });
 
-        check("recursion load = 2", "f:sf-1\nf=2", new string[]{
+        check("recursion load = 2", "f:sf-1\nf=2", new char[]{
             Step.STEP_FORWARD,
             Step.STEP_FORWARD
         });
 
-        check("multi recursion load = 1", "z:srz-1\nf:sz-1f-1\nf=4", new string[]{
+        check("multi recursion load = 1", "z:srz-1\nf:sz-1f-1\nf=4", new char[]{
             Step.STEP_FORWARD,
             Step.STEP_FORWARD,
             Step.TURN_RIGHT,

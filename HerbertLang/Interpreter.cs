@@ -13,18 +13,18 @@ namespace HerberLang {
             return ast.eval() as CodeNode;
         }
 
-        public static List<string> evalToCode(string program) {
+        public static string evalToCode(string program) {
             var code = Interpreter.eval(program);
 
-            var steps = new List<string>();
+            var steps = new List<char>();
 
-            if (code == null) return steps;
+            if (code == null) return "";
 
             foreach (StepNode step in code.steps) {
                 steps.Add(step.step_);
             }
 
-            return steps;
+            return new string(steps.ToArray());
         }
 
         public static string evalToString(string program) {

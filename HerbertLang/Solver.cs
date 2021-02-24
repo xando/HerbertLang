@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-
+using System.Text;
 
 namespace HerberLang {
 
@@ -9,25 +10,25 @@ namespace HerberLang {
         public const string PLAYER_DOWN = "2";
         public const string PLAYER_LEFT = "3";
         public const string OBSTACLE = "x";
-        public const string SPACE = " ";
+        public const string SPACE = "_";
         public const string ITEM = "*";
     }
 
     public static class Step {
-        public const string TURN_RIGHT = "r";
-        public const string TURN_LEFT = "l";
-        public const string STEP_FORWARD = "s";
-        public const string STEP_BAD = "x";
+        public const char TURN_RIGHT = 'r';
+        public const char TURN_LEFT = 'l';
+        public const char STEP_FORWARD = 's';
+        public const char STEP_BAD = 'x';
     }
 
     public class Solution {
         public bool success = false;
         public LanguageError error;
 
-        public List<string> steps;
+        public string steps;
         public string code;
 
-        public Solution(bool success, List<string> steps, string code) {
+        public Solution(bool success, string steps, string code) {
             this.success = success;
             this.steps = steps;
             this.code = code;
@@ -46,7 +47,6 @@ namespace HerberLang {
             int direction = 0;
             int[] position = new int[2];
 
-
             for (int i = 0; i <= world.GetUpperBound(0); i++) {
                 for (int j = 0; j <= world.GetUpperBound(1); j++) {
                     if (world[i, j] == Tile.PLAYER_UP ||
@@ -60,59 +60,59 @@ namespace HerberLang {
                 }
             }
 
-            List<string> interpreterSteps;
+            string interpreterSteps;
+
             try {
                 interpreterSteps = Interpreter.evalToCode(codeInput);
             } catch (LanguageError error) {
                 return new Solution(error);
             }
 
-            List<string> solutionSteps = new List<string>();
+            var solutionSteps = new StringBuilder();
 
             foreach (var step in interpreterSteps) {
+
                 if (step == Step.TURN_RIGHT) {
                     direction = (direction + 1) % 4;
-                    solutionSteps.Add(Step.TURN_RIGHT);
+                    solutionSteps.Append(Step.TURN_RIGHT);
                 } else
                 if (step == Step.TURN_LEFT) {
                     direction = (direction - 1) % 4;
                     if (direction < 0) {
                         direction += 4;
                     }
-                    solutionSteps.Add(Step.TURN_LEFT);
+                    solutionSteps.Append(Step.TURN_LEFT);
                 } else
                 if (step == Step.STEP_FORWARD) {
-                    int[] nextPosition = new int[2];
+                    int[] nextPosition = new int[] { position[0], position[1] };
 
-                    position.CopyTo(nextPosition, 0);
                     if (direction == 0) {
-                        nextPosition[0]++;
-                    } else
-                    if (direction == 1) {
-                        nextPosition[1]--;
-                    } else
-                    if (direction == 2) {
                         nextPosition[0]--;
                     } else
-                    if (direction == 3) {
+                    if (direction == 1) {
                         nextPosition[1]++;
+                    } else
+                    if (direction == 2) {
+                        nextPosition[0]++;
+                    } else
+                    if (direction == 3) {
+                        nextPosition[1]--;
                     }
 
-                    if (nextPosition[0] > world.GetUpperBound(0) ||
-                        nextPosition[0] < 0) {
-                        solutionSteps.Add(Step.STEP_BAD);
+                    if (nextPosition[0] > world.GetUpperBound(0) || nextPosition[0] < 0) {
+                        solutionSteps.Append(Step.STEP_BAD);
                     } else
-                    if (nextPosition[1] > world.GetUpperBound(1) ||
-                        nextPosition[1] < 0) {
-                        solutionSteps.Add(Step.STEP_BAD);
+                    if (nextPosition[1] > world.GetUpperBound(1) || nextPosition[1] < 0) {
+                        solutionSteps.Append(Step.STEP_BAD);
                     } else {
-                        solutionSteps.Add(Step.STEP_FORWARD);
-                        nextPosition.CopyTo(position, 0);
+                        solutionSteps.Append(Step.STEP_FORWARD);
+
+                        position[0] = nextPosition[0];
+                        position[1] = nextPosition[1];
 
                         if (world[position[0], position[1]] == Tile.ITEM) {
                             world[position[0], position[1]] = Tile.SPACE;
                         }
-
                     }
                 }
             }
@@ -129,7 +129,7 @@ namespace HerberLang {
 
             return new Solution(
                 success,
-                solutionSteps,
+                solutionSteps.ToString(),
                 codeInput
             );
 
