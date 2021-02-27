@@ -13,7 +13,7 @@ namespace HerbertLang.Tests {
             string[,] world = {
                 {Tile.OBSTACLE, Tile.ITEM,      Tile.OBSTACLE},
                 {Tile.OBSTACLE, Tile.SPACE,     Tile.OBSTACLE},
-                {Tile.OBSTACLE, Tile.PLAYER_UP, Tile.OBSTACLE}
+                {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
             };
 
             var solution = Solver.Solve("sss", world);
@@ -31,7 +31,7 @@ namespace HerbertLang.Tests {
             string[,] world = {
                 {Tile.OBSTACLE, Tile.ITEM,      Tile.OBSTACLE},
                 {Tile.OBSTACLE, Tile.SPACE,     Tile.OBSTACLE},
-                {Tile.OBSTACLE, Tile.PLAYER_UP, Tile.OBSTACLE}
+                {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
             };
 
             var solution = Solver.Solve("s", world);
@@ -47,7 +47,7 @@ namespace HerbertLang.Tests {
             string[,] world = {
                 {Tile.OBSTACLE, Tile.ITEM,        Tile.OBSTACLE},
                 {Tile.OBSTACLE, Tile.SPACE,       Tile.OBSTACLE},
-                {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
+                {Tile.OBSTACLE, Tile.PLAYER_UP, Tile.OBSTACLE}
             };
 
             var solution = Solver.Solve("s", world);
