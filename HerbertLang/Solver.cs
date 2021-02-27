@@ -99,6 +99,9 @@ namespace HerberLang {
                         nextPosition[1]--;
                     }
 
+                    if (world[nextPosition[0], nextPosition[1]] == Tile.OBSTACLE) {
+                        solutionSteps.Append(Step.STEP_BAD);
+                    } else
                     if (nextPosition[0] > world.GetUpperBound(0) || nextPosition[0] < 0) {
                         solutionSteps.Append(Step.STEP_BAD);
                     } else
