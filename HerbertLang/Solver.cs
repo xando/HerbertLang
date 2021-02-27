@@ -9,9 +9,9 @@ namespace HerberLang {
         public const string PLAYER_RIGHT = "1";
         public const string PLAYER_DOWN = "2";
         public const string PLAYER_LEFT = "3";
-        public const string OBSTACLE = "x";
+        public const string OBSTACLE = "#";
         public const string SPACE = "_";
-        public const string ITEM = "*";
+        public const string ITEM = "+";
     }
 
     public static class Step {
@@ -47,15 +47,15 @@ namespace HerberLang {
             int direction = 0;
             int[] position = new int[2];
 
-            for (int i = 0; i <= world.GetUpperBound(0); i++) {
-                for (int j = 0; j <= world.GetUpperBound(1); j++) {
-                    if (world[i, j] == Tile.PLAYER_UP ||
-                        world[i, j] == Tile.PLAYER_RIGHT ||
-                        world[i, j] == Tile.PLAYER_DOWN ||
-                        world[i, j] == Tile.PLAYER_LEFT) {
-                        direction = int.Parse(world[i, j]);
-                        position[0] = i;
-                        position[1] = j;
+            for (int x = 0; x <= world.GetUpperBound(1); x++) {
+                for (int y = 0; y <= world.GetUpperBound(0); y++) {
+                    if (world[x, y] == Tile.PLAYER_UP ||
+                        world[x, y] == Tile.PLAYER_RIGHT ||
+                        world[x, y] == Tile.PLAYER_DOWN ||
+                        world[x, y] == Tile.PLAYER_LEFT) {
+                        direction = int.Parse(world[x, y]);
+                        position[0] = x;
+                        position[1] = y;
                     }
                 }
             }
@@ -87,27 +87,27 @@ namespace HerberLang {
                     int[] nextPosition = new int[] { position[0], position[1] };
 
                     if (direction == 0) {
-                        nextPosition[0]--;
+                        nextPosition[0]++;
                     } else
                     if (direction == 1) {
                         nextPosition[1]++;
                     } else
                     if (direction == 2) {
-                        nextPosition[0]++;
+                        nextPosition[0]--;
                     } else
                     if (direction == 3) {
                         nextPosition[1]--;
                     }
 
-                    if (world[nextPosition[0], nextPosition[1]] == Tile.OBSTACLE) {
-                        solutionSteps.Append(Step.STEP_BAD);
-                    } else
                     if (nextPosition[0] > world.GetUpperBound(0) || nextPosition[0] < 0) {
                         solutionSteps.Append(Step.STEP_BAD);
                     } else
                     if (nextPosition[1] > world.GetUpperBound(1) || nextPosition[1] < 0) {
                         solutionSteps.Append(Step.STEP_BAD);
                     } else {
+                    if (world[nextPosition[0], nextPosition[1]] == Tile.OBSTACLE) {
+                        solutionSteps.Append(Step.STEP_BAD);
+                    } else
                         solutionSteps.Append(Step.STEP_FORWARD);
 
                         position[0] = nextPosition[0];
@@ -121,9 +121,9 @@ namespace HerberLang {
             }
 
             bool success = true;
-            for (int i = 0; i <= world.GetUpperBound(0); i++) {
-                for (int j = 0; j <= world.GetUpperBound(1); j++) {
-                    if (world[i, j] == Tile.ITEM) {
+            for (int x = 0; x <= world.GetUpperBound(1); x++) {
+                for (int y = 0; y <= world.GetUpperBound(0); y++) {
+                    if (world[x, y] == Tile.ITEM) {
                         success = false;
                         break;
                     }
