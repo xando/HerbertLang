@@ -47,15 +47,17 @@ namespace HerberLang {
             int direction = 0;
             int[] position = new int[2];
 
-            for (int x = 0; x <= world.GetUpperBound(1); x++) {
-                for (int y = 0; y <= world.GetUpperBound(0); y++) {
-                    if (world[x, y] == Tile.PLAYER_UP ||
-                        world[x, y] == Tile.PLAYER_RIGHT ||
-                        world[x, y] == Tile.PLAYER_DOWN ||
-                        world[x, y] == Tile.PLAYER_LEFT) {
-                        direction = int.Parse(world[x, y]);
-                        position[0] = x;
-                        position[1] = y;
+            for (int y = 0; y <= world.GetUpperBound(0); y++) {
+                for (int x = 0; x <= world.GetUpperBound(1); x++) {
+                    if (world[y, x] == Tile.PLAYER_UP ||
+                        world[y, x] == Tile.PLAYER_RIGHT ||
+                        world[y, x] == Tile.PLAYER_DOWN ||
+                        world[y, x] == Tile.PLAYER_LEFT) {
+
+                        direction = int.Parse(world[y, x]);
+
+                        position[0] = y;
+                        position[1] = x;
                     }
                 }
             }
@@ -121,9 +123,9 @@ namespace HerberLang {
             }
 
             bool success = true;
-            for (int x = 0; x <= world.GetUpperBound(1); x++) {
-                for (int y = 0; y <= world.GetUpperBound(0); y++) {
-                    if (world[x, y] == Tile.ITEM) {
+            for (int y = 0; y <= world.GetUpperBound(0); y++) {
+                for (int x = 0; x <= world.GetUpperBound(1); x++) {
+                    if (world[y, x] == Tile.ITEM) {
                         success = false;
                         break;
                     }
