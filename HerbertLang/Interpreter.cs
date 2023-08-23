@@ -1,50 +1,46 @@
-using System.Collections.Generic;
 using System.Text;
 
+namespace HerbertLang;
 
-namespace HerberLang {
-    public static class Interpreter {
 
-        private static CodeNode eval(string program) {
+public static class Interpreter {
 
-            var tokens = Lexer.tokenize(program);
-            var ast = Parser.parse(tokens);
+    private static CodeNode eval(string program) {
 
-            return ast.eval() as CodeNode;
-        }
+        var tokens = Lexer.tokenize(program);
+        var programNode = Parser.parse(tokens);
 
-        public static string evalToCode(string program) {
-            var code = Interpreter.eval(program);
+        return (CodeNode)programNode.eval();
+    }
 
-            var steps = new List<char>();
+    public static string evalToCode(string program) {
+        var code = Interpreter.eval(program);
 
-            if (code == null) return "";
+        var steps = new List<char>();
 
-            foreach (StepNode step in code.steps) {
-                steps.Add(step.step_);
+        // if (code == null) return "";
+
+        // foreach (StepNode step in code.steps) {
+        //     steps.Add(step.step_);
+        // }
+
+        return new string(steps.ToArray());
+    }
+
+    public static string evalToString(string programText) {
+        try {
+            var codeNode = Interpreter.eval(programText);
+
+            var steps = new StringBuilder();
+
+            foreach (StepNode stepNode in codeNode.steps) {
+                steps.Append(stepNode.step);
             }
 
-            return new string(steps.ToArray());
-        }
+            return steps.ToString();
 
-        public static string evalToString(string program) {
-            try {
-                var code = Interpreter.eval(program);
-
-                if (code == null) return "";
-
-                var steps = new StringBuilder();
-
-                if (code != null) {
-                    foreach (StepNode step in code.steps) {
-                        steps.Append(step.step);
-                    }
-                }
-                return steps.ToString();
-
-            } catch (LanguageError ex) {
-                return ex.ToString();
-            }
+        } catch (LanguageError ex) {
+            return ex.ToString();
         }
     }
 }

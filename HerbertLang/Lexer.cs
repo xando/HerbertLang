@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace HerberLang {
+namespace HerbertLang {
 
     public struct Token {
+
         public string content;
         public string type;
         public int column;

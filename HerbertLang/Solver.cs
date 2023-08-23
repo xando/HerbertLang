@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HerberLang {
+namespace HerbertLang {
 
     public static class Tile {
         public const string PLAYER_UP = "0";
@@ -112,12 +112,12 @@ namespace HerberLang {
                     } else
                         solutionSteps.Append(Step.STEP_FORWARD);
 
-                        position[0] = nextPosition[0];
-                        position[1] = nextPosition[1];
+                    position[0] = nextPosition[0];
+                    position[1] = nextPosition[1];
 
-                        if (world[position[0], position[1]] == Tile.ITEM) {
-                            world[position[0], position[1]] = Tile.SPACE;
-                        }
+                    if (world[position[0], position[1]] == Tile.ITEM) {
+                        world[position[0], position[1]] = Tile.SPACE;
+                    }
                     }
                 }
             }
