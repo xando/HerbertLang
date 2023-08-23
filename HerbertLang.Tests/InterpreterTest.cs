@@ -14,31 +14,12 @@ public class TestInterpreter {
 
 
     [Fact]
-    public void TestSimple() {
+    public void TestCode() {
         Assert.Equal("srl", Interpreter.evalToString("srl"));
     }
 
-
     [Fact]
-    public void TestSimple2() {
-        var code = @"
-f:s
-rrrf
-lllf
-";
-
-        Assert.Equal("rrrsllls", Interpreter.evalToString(code));
-    }
-
-    [Fact]
-    public void TestUndefinedError() {
-        var code = "fss";
-
-        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(code));
-    }
-
-    [Fact]
-    public void EvalProgram_1() {
+    public void TestCodeMultipleLinies() {
 
         var code = @"
 rr
@@ -49,5 +30,36 @@ lsr
             Interpreter.evalToString(code)
         );
     }
+
+    [Fact]
+    public void TestFunctionDefintion() {
+        var code = @"
+f:s
+rrrf
+lllf
+";
+
+        Assert.Equal("rrrsllls", Interpreter.evalToString(code));
+    }
+
+[Fact]
+    public void TestMultipleFunctions() {
+        var code = @"
+z:s
+f:sz
+rrrf
+lllf
+";
+
+        Assert.Equal("rrrsslllss", Interpreter.evalToString(code));
+    }
+
+    [Fact]
+    public void TestUndefinedError() {
+        var code = "fss";
+
+        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(code));
+    }
+
 }
 
