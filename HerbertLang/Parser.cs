@@ -119,8 +119,6 @@ public class Parser {
 
     public F_CallNode parseFunctionCall() {
         var arguments = new List<CodeNode>();
-        // var durability = 1;
-        // bool durabilityOverwrite = false;
 
         Token? t = peek();
 
@@ -134,14 +132,6 @@ public class Parser {
             t.Value.type == "=" ||
             t.Value.type == "+" ||
             t.Value.type == "-")) {
-                
-            // if (t.Value.type == "=") {
-            //     durabilityOverwrite = true;
-            //     consume("=");
-            //     var number = parseNumber();
-
-            //     durability = number.value;
-            // }
 
             if (t.Value.type == "+") {
                 consume("+");
@@ -151,7 +141,6 @@ public class Parser {
             if (t.Value.type == "-") {
                 consume("-");
                 var number = parseNumber();
-                // durability = -number.value;
             }
         }
 
@@ -171,12 +160,7 @@ public class Parser {
             consume(")");
         }
 
-        return new F_CallNode(
-            token,
-            arguments
-            // durability,
-            // durabilityOverwrite
-        );
+        return new F_CallNode(token, arguments);
     }
 
     public CodeNode parseCode() {

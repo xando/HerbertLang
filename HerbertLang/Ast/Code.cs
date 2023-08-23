@@ -43,18 +43,6 @@ public class CodeNode : AstNode {
                 throw new NotSupportedException($"{step.ToString()} not supported");
             }
         }
-
         return codeNode;
-    }
-
-    public override string ToString() {
-
-        var items = new List<string>();
-
-        foreach (var step in this.steps) {
-            items.Add(step.ToString());
-        }
-
-        return string.Join(", ", items.ToArray());
     }
 }
