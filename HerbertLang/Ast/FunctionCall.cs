@@ -52,10 +52,8 @@ public class F_CallNode : AstNode {
             throw new LanguageError("Call stack exceed max size 128", this);
         }
 
-        var codeNode = new CodeNode();
-        codeNode.extend(definition.code);
-
-        return codeNode;
+        var codeNode = new CodeNode(definition.code.steps);
+        return codeNode.eval(context);
     }
 
     public override string ToString() {
