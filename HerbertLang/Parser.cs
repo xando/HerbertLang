@@ -65,6 +65,7 @@ public class Parser {
                     throw new LanguageError("Duplicate parameter", parameter);
                 }
 
+                Console.WriteLine("Parameter: " + parameter.name);
                 parameters.Add(parameter);
                 parametersNames.Add(parameter.name);
 
@@ -128,22 +129,6 @@ public class Parser {
 
         t = peek();
 
-        if (t.HasValue && (
-            t.Value.type == "=" ||
-            t.Value.type == "+" ||
-            t.Value.type == "-")) {
-
-            if (t.Value.type == "+") {
-                consume("+");
-                var number = parseNumber();
-                // durability = number.value;
-            }
-            if (t.Value.type == "-") {
-                consume("-");
-                var number = parseNumber();
-            }
-        }
-
         if (t.HasValue && t.Value.type == "(") {
             consume("(");
 
@@ -203,21 +188,9 @@ public class Parser {
         return new VariableNode(t.Value);
     }
 
-    public NumberNode parseNumber() {
+    public F_ParameterNode parseParameter() {
         Token? t = peek();
-
-        var sign = 1;
-
-        while (t?.type == "-") {
-            sign *= -1;
-            consume("-");
-            t = peek();
-        }
-        var numer = Int32.Parse(t?.content);
-
-        consume("NUMBER");
-
-        return new NumberNode(numer * sign);
-
+        consume("PARAMETER");
+        return new F_ParameterNode(t.Value);
     }
 }

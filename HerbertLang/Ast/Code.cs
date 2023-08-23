@@ -27,17 +27,16 @@ public class CodeNode : AstNode {
                 codeNode.steps.Add(
                     ((StepNode)step).eval(context)
                 );
-            } else
-            if (step is F_CallNode) {
+            } else if (step is F_CallNode) {
                 codeNode.steps.AddRange(
                     ((F_CallNode)step).eval(context).steps
                 );
             } 
-            // else if (step is VariableNode) {
-            //     steps.AddRange(
-            //         ((VariableNode)step).eval(context).steps
-            //     );
-            // } 
+            else if (step is VariableNode) {
+                steps.AddRange(
+                    ((VariableNode)step).eval(context).steps
+                );
+            } 
 
             else {
                 throw new NotSupportedException($"{step.ToString()} not supported");

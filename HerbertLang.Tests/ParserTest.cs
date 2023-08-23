@@ -49,7 +49,7 @@ public class ParserTest {
     [Fact]
     public void FunctionCall_With_Arguments() {
 
-        var tokens = Lexer.tokenize("z(z, s)");
+        var tokens = Lexer.tokenize("z(s, B, z)");
         var parser = new Parser(tokens);
 
         F_CallNode functionCall = parser.parseFunctionCall();
@@ -58,13 +58,15 @@ public class ParserTest {
         Assert.Equal(1, functionCall.line);
         Assert.Equal(1, functionCall.column);
 
-        Assert.Equal(2, functionCall.arguments.Count);
+        Assert.Equal(3, functionCall.arguments.Count);
 
-        Assert.Equal(1, functionCall.arguments[0].steps.Count);
-        Assert.IsType<F_CallNode>(functionCall.arguments[0].steps[0]);
+        Assert.IsType<CodeNode>(functionCall.arguments[0]);
+        Assert.IsType<CodeNode>(functionCall.arguments[1]);
+        Assert.IsType<CodeNode>(functionCall.arguments[2]);
 
-        Assert.Equal(1, functionCall.arguments[1].steps.Count);
-        Assert.IsType<StepNode>(functionCall.arguments[1].steps[0]);
+        Assert.IsType<StepNode>(functionCall.arguments[0].steps[0]);
+        Assert.IsType<VariableNode>(functionCall.arguments[1].steps[0]);
+        Assert.IsType<F_CallNode>(functionCall.arguments[2].steps[0]);
     }
 
     [Fact]
@@ -131,22 +133,7 @@ public class ParserTest {
     }
 
     [Fact]
-    public void EvalFunctionDefinition_With_Arguments() {
-        var tokens = Lexer.tokenize("f(A,B):ssAA");
-        var parser = new Parser(tokens);
-
-        F_DefinitionNode definition = parser.parseFunctionDefinition();
-
-        Assert.Equal("f", definition.name);
-        Assert.Equal(1, definition.column);
-        Assert.Equal(1, definition.line);
-
-        Assert.Equal(2, definition.parameters.Count);
-        Assert.Equal("A", definition.parameters[0].name);
-    }
-
-    [Fact]
-    public void Program_Just_Functions() {
+    public void FunctionDefinitionMultiple() {
         var tokens = Lexer.tokenize(@"
 f:sss
 z:sss
@@ -161,7 +148,31 @@ z:sss
     }
 
     [Fact]
-    public void Program_Just_Code() {
+    public void FunctionDefinitionWithArguments() {
+        var tokens = Lexer.tokenize("f(A,B):ssAB");
+        var parser = new Parser(tokens);
+
+        F_DefinitionNode definition = parser.parseFunctionDefinition();
+
+        Assert.Equal("f", definition.name);
+        Assert.Equal(1, definition.column);
+        Assert.Equal(1, definition.line);
+
+        Assert.Equal(2, definition.parameters.Count);
+        Assert.Equal("A", definition.parameters[0].name);
+        Assert.Equal("B", definition.parameters[1].name);
+    }
+
+    [Fact]
+    public void FunctionDefinitionWithArgumentsDuplicated() {
+        var tokens = Lexer.tokenize("f( A, A ):ssAA");
+        var parser = new Parser(tokens);
+
+        Assert.Throws<LanguageError>(() => parser.parseFunctionDefinition());
+    }
+
+    [Fact]
+    public void ProgramJustCode() {
         var tokens = Lexer.tokenize(@"
 sss
 
@@ -181,7 +192,7 @@ lll
 
         Assert.Equal(4, code.steps[3].line);
         Assert.Equal(4, code.steps[4].line);
-        Assert.Equal(4, code.steps[4].line);        
+        Assert.Equal(4, code.steps[4].line);
 
     }
 

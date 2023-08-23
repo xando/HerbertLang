@@ -61,5 +61,16 @@ lllf
         Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(code));
     }
 
+    [Fact]
+    public void TestFunctionWithParameters() {
+        var code = @"
+f(A):A
+f(s)
+";
+
+        Assert.Equal("s", Interpreter.evalToString(code));
+    }
+
+
 }
 
