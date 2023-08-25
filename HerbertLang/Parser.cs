@@ -1,5 +1,5 @@
 namespace HerbertLang;
-
+#nullable enable
 
 public class Parser {
 
@@ -11,22 +11,24 @@ public class Parser {
     List<Token> tokens;
     int position;
 
+    public Token? currentToken {
+        get {
+            if (position < tokens.Count) {
+                return tokens[position];
+            }
+            return null;
+        }
+    }
+
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         this.position = 0;
     }
 
-    Token? peekToken(int ahead = 0) {
-        if (position + ahead < tokens.Count) {
-            return tokens[position + ahead];
-        }
-        return null;
-    }
-
     void consume(string type) {
-        if (position >= tokens.Count) {
+        if (this.position >= tokens.Count) {
 
-            var prevToken = tokens[position - 1];
+            var prevToken = tokens[this.position - 1];
             var msg = string.Format("Expected '{0}'", type);
 
             throw new LanguageError(msg, prevToken.line, prevToken.column);
@@ -39,7 +41,7 @@ public class Parser {
             throw new LanguageError(msg, token.line, token.column);
         }
 
-        position++;
+        this.position++;
     }
 
     public F_DefinitionNode parseFunctionDefinition() {
@@ -48,19 +50,17 @@ public class Parser {
 
         consume("#");
 
-        Token? t = peekToken();
-        var functionToken = t.Value;
+        var functionNameToken = this.currentToken!.Value;
 
         consume("FUNCTION");
 
-        t = peekToken();
-        if (t.HasValue && t.Value.type == "(") {
+        if (this.currentToken != null && this.currentToken.Value.type == "(") {
 
             consume("(");
 
-            while (peekToken().HasValue && peekToken().Value.type == "PARAMETER") {
-                var parameterToken = peekToken().Value;
-                var parameter = new F_ParameterNode(parameterToken);
+            while (this.currentToken != null && this.currentToken.Value.type == "PARAMETER") {
+                
+                var parameter = new F_ParameterNode(this.currentToken!.Value);
 
                 if (parametersNames.Contains(parameter.name)) {
                     throw new LanguageError("Duplicate parameter", parameter);
@@ -71,10 +71,11 @@ public class Parser {
 
                 consume("PARAMETER");
 
-                if (peekToken().HasValue && peekToken().Value.type == "," && peekToken(1).Value.type == "PARAMETER") {
+                if (this.currentToken != null && this.currentToken.Value.type == ",") {
                     consume(",");
-                } else {
-                    break;
+                    // TODO - not sure if we should allow trailing commas.
+                    //        Check if there is a parameter after the comma, if not, throw an error.
+                    //        Technically we should expect that there is a parameter after the comma.
                 }
             }
             consume(")");
@@ -83,7 +84,7 @@ public class Parser {
         consume(":");
 
         var code = parseCode();
-        var definition = new F_DefinitionNode(functionToken, parameters, code);
+        var definition = new F_DefinitionNode(functionNameToken, parameters, code);
 
         return definition;
     }
@@ -93,15 +94,13 @@ public class Parser {
         var f_definitions = new Dictionary<string, F_DefinitionNode>();
         var mainCodeNode = new CodeNode();
 
-        Token? t = peekToken();
-        while (t.HasValue && t.Value.type == "NEW_LINE") {
+        while (this.currentToken != null && this.currentToken.Value.type == "NEW_LINE") {
             consume("NEW_LINE");
-            t = peekToken();
         }
 
-        while (t.HasValue) {
+        while (this.currentToken != null) {
 
-            if (t.Value.type == "#") {
+            if (this.currentToken.Value.type == "#") {
                 var definition = parseFunctionDefinition();
 
                 if (f_definitions.ContainsKey(definition.name)) {
@@ -112,8 +111,7 @@ public class Parser {
                 }
                 f_definitions[definition.name] = definition;
 
-                t = peekToken();
-                if (t != null) {
+                if (this.currentToken != null) {
                     consume("NEW_LINE");
                 }
 
@@ -121,14 +119,11 @@ public class Parser {
             else {
                 mainCodeNode.extend(parseCode());
 
-                t = peekToken();
-                if (t != null) {
+                if (this.currentToken != null) {
                     consume("NEW_LINE");
                 }
 
             }
-
-            t = peekToken();
         }
 
         return new ProgramNode(f_definitions, mainCodeNode);
@@ -136,26 +131,20 @@ public class Parser {
 
     public F_CallNode parseFunctionCall() {
         var arguments = new List<CodeNode>();
-
-        Token? t = peekToken();
-
-        var token = t.Value;
+    
+        var token = this.currentToken!.Value;
 
         consume("FUNCTION");
 
-        t = peekToken();
-
-        if (t.HasValue && t.Value.type == "(") {
+        if (this.currentToken != null && this.currentToken.Value.type == "(") {
             consume("(");
 
-            while (peekToken().HasValue && peekToken().Value.type != ")") {
+            while (this.currentToken != null && this.currentToken.Value.type != ")") {
 
                 arguments.Add(parseCode());
 
-                if (peekToken().HasValue && peekToken().Value.type == ",") {
+                if (this.currentToken != null && this.currentToken.Value.type == ",") {
                     consume(",");
-                } else {
-                    break;
                 }
             }
             consume(")");
@@ -168,45 +157,37 @@ public class Parser {
 
         List<AstNode> steps = new List<AstNode>();
 
-        Token? t = peekToken();
+        while (this.currentToken != null && this.currentToken.Value.type is "STEP" or "FUNCTION" or "PARAMETER") {
 
-        while (t.HasValue && (
-            t.Value.type == "STEP" ||
-            t.Value.type == "FUNCTION" ||
-            t.Value.type == "PARAMETER")) {
-
-            if (t.Value.type == "FUNCTION") {
+            if (this.currentToken.Value.type == "FUNCTION") {
                 steps.Add(parseFunctionCall());
-
-            } else if (t.Value.type == "PARAMETER") {
+            } else
+            if (this.currentToken.Value.type == "PARAMETER") {
                 steps.Add(parseVariable());
-
-
-            } else if (t.Value.type == "STEP") {
+            } else
+            if (this.currentToken.Value.type == "STEP") {
                 steps.Add(parseStep());
             }
-
-            t = peekToken();
         }
 
         return new CodeNode(steps);
     }
 
     public StepNode parseStep() {
-        Token? t = peekToken();
+        Token token = this.currentToken!.Value;
         consume("STEP");
-        return new StepNode(t.Value);
+        return new StepNode(token);
     }
 
     public VariableNode parseVariable() {
-        Token? t = peekToken();
+        Token token = this.currentToken!.Value;
         consume("PARAMETER");
-        return new VariableNode(t.Value);
+        return new VariableNode(token);
     }
 
     public F_ParameterNode parseParameter() {
-        Token? t = peekToken();
+        Token token = this.currentToken!.Value;
         consume("PARAMETER");
-        return new F_ParameterNode(t.Value);
+        return new F_ParameterNode(token);
     }
 }
