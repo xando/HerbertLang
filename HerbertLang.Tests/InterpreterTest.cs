@@ -34,7 +34,7 @@ lsr
     [Fact]
     public void TestFunctionDefintion() {
         var code = @"
-f:s
+#f:s
 rrrf
 lllf
 ";
@@ -45,8 +45,8 @@ lllf
 [Fact]
     public void TestMultipleFunctions() {
         var code = @"
-z:s
-f:sz
+#z:s
+#f:sz
 rrrf
 lllf
 ";
@@ -64,13 +64,10 @@ lllf
     [Fact]
     public void TestFunctionWithParameters() {
         var code = @"
-f(A):A
+#f(A):A
 f(s)
 ";
-
         Assert.Equal("s", Interpreter.evalToString(code));
     }
 
-
 }
-

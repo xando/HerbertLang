@@ -16,7 +16,7 @@ public class Parser {
         this.position = 0;
     }
 
-    Token? peek(int ahead = 0) {
+    Token? peekToken(int ahead = 0) {
         if (position + ahead < tokens.Count) {
             return tokens[position + ahead];
         }
@@ -46,32 +46,32 @@ public class Parser {
         var parameters = new List<F_ParameterNode>();
         var parametersNames = new List<string>();
 
-        Token? t = peek();
+        consume("#");
 
-        var token = t.Value;
+        Token? t = peekToken();
+        var functionToken = t.Value;
 
         consume("FUNCTION");
 
-        t = peek();
+        t = peekToken();
         if (t.HasValue && t.Value.type == "(") {
 
             consume("(");
 
-            while (peek().HasValue && peek().Value.type == "PARAMETER") {
-                var parameterToken = peek().Value;
+            while (peekToken().HasValue && peekToken().Value.type == "PARAMETER") {
+                var parameterToken = peekToken().Value;
                 var parameter = new F_ParameterNode(parameterToken);
 
                 if (parametersNames.Contains(parameter.name)) {
                     throw new LanguageError("Duplicate parameter", parameter);
                 }
 
-                Console.WriteLine("Parameter: " + parameter.name);
                 parameters.Add(parameter);
                 parametersNames.Add(parameter.name);
 
                 consume("PARAMETER");
 
-                if (peek().HasValue && peek().Value.type == "," && peek(1).Value.type == "PARAMETER") {
+                if (peekToken().HasValue && peekToken().Value.type == "," && peekToken(1).Value.type == "PARAMETER") {
                     consume(",");
                 } else {
                     break;
@@ -79,9 +79,12 @@ public class Parser {
             }
             consume(")");
         }
+
         consume(":");
+
         var code = parseCode();
-        var definition = new F_DefinitionNode(token, parameters, code);
+        var definition = new F_DefinitionNode(functionToken, parameters, code);
+
         return definition;
     }
 
@@ -90,15 +93,15 @@ public class Parser {
         var f_definitions = new Dictionary<string, F_DefinitionNode>();
         var mainCodeNode = new CodeNode();
 
-        Token? t = peek();
+        Token? t = peekToken();
+        while (t.HasValue && t.Value.type == "NEW_LINE") {
+            consume("NEW_LINE");
+            t = peekToken();
+        }
 
         while (t.HasValue) {
 
-            if (t.Value.type == "NEW_LINE") {
-                consume("NEW_LINE");
-            } else
-            if (t.Value.type == "FUNCTION" &&
-                peek(1).HasValue && peek(1).Value.type == ":") {
+            if (t.Value.type == "#") {
                 var definition = parseFunctionDefinition();
 
                 if (f_definitions.ContainsKey(definition.name)) {
@@ -107,12 +110,25 @@ public class Parser {
                         definition
                     );
                 }
-                f_definitions[t.Value.content] = definition;
-            } else {
-                mainCodeNode.extend(parseCode());
-            }
-            t = peek();
+                f_definitions[definition.name] = definition;
 
+                t = peekToken();
+                if (t != null) {
+                    consume("NEW_LINE");
+                }
+
+            }
+            else {
+                mainCodeNode.extend(parseCode());
+
+                t = peekToken();
+                if (t != null) {
+                    consume("NEW_LINE");
+                }
+
+            }
+
+            t = peekToken();
         }
 
         return new ProgramNode(f_definitions, mainCodeNode);
@@ -121,22 +137,22 @@ public class Parser {
     public F_CallNode parseFunctionCall() {
         var arguments = new List<CodeNode>();
 
-        Token? t = peek();
+        Token? t = peekToken();
 
         var token = t.Value;
 
         consume("FUNCTION");
 
-        t = peek();
+        t = peekToken();
 
         if (t.HasValue && t.Value.type == "(") {
             consume("(");
 
-            while (peek().HasValue && peek().Value.type != ")") {
+            while (peekToken().HasValue && peekToken().Value.type != ")") {
 
                 arguments.Add(parseCode());
 
-                if (peek().HasValue && peek().Value.type == ",") {
+                if (peekToken().HasValue && peekToken().Value.type == ",") {
                     consume(",");
                 } else {
                     break;
@@ -152,7 +168,7 @@ public class Parser {
 
         List<AstNode> steps = new List<AstNode>();
 
-        Token? t = peek();
+        Token? t = peekToken();
 
         while (t.HasValue && (
             t.Value.type == "STEP" ||
@@ -170,26 +186,26 @@ public class Parser {
                 steps.Add(parseStep());
             }
 
-            t = peek();
+            t = peekToken();
         }
 
         return new CodeNode(steps);
     }
 
     public StepNode parseStep() {
-        Token? t = peek();
+        Token? t = peekToken();
         consume("STEP");
         return new StepNode(t.Value);
     }
 
     public VariableNode parseVariable() {
-        Token? t = peek();
+        Token? t = peekToken();
         consume("PARAMETER");
         return new VariableNode(t.Value);
     }
 
     public F_ParameterNode parseParameter() {
-        Token? t = peek();
+        Token? t = peekToken();
         consume("PARAMETER");
         return new F_ParameterNode(t.Value);
     }

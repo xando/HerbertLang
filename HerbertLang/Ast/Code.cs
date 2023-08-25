@@ -19,20 +19,22 @@ public class CodeNode : AstNode {
 
     public override CodeNode eval(Context context) {
 
-        var codeNode = new CodeNode();
+        var steps = new List<AstNode>();
 
         foreach (var step in this.steps) {
            
             if (step is StepNode) {
-                codeNode.steps.Add(
+                steps.Add(
                     ((StepNode)step).eval(context)
                 );
-            } else if (step is F_CallNode) {
-                codeNode.steps.AddRange(
+            } else 
+            if (step is F_CallNode) {
+                steps.AddRange(
                     ((F_CallNode)step).eval(context).steps
                 );
             } 
-            else if (step is VariableNode) {
+            else 
+            if (step is VariableNode) {
                 steps.AddRange(
                     ((VariableNode)step).eval(context).steps
                 );
@@ -42,6 +44,7 @@ public class CodeNode : AstNode {
                 throw new NotSupportedException($"{step.ToString()} not supported");
             }
         }
-        return codeNode;
+        
+        return new CodeNode(steps);
     }
 }

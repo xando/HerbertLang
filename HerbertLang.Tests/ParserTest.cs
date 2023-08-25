@@ -119,14 +119,14 @@ public class ParserTest {
     [Fact]
     public void FunctionDefinition() {
 
-        var tokens = Lexer.tokenize("f:sss");
+        var tokens = Lexer.tokenize("#f:sss");
         var parser = new Parser(tokens);
 
         F_DefinitionNode definition = parser.parseFunctionDefinition();
 
         Assert.Equal("f", definition.name);
         Assert.Equal(1, definition.line);
-        Assert.Equal(1, definition.column);
+        Assert.Equal(2, definition.column);
 
         Assert.Equal(0, definition.parameters.Count);
         Assert.Equal(3, definition.code.steps.Count);
@@ -135,8 +135,8 @@ public class ParserTest {
     [Fact]
     public void FunctionDefinitionMultiple() {
         var tokens = Lexer.tokenize(@"
-f:sss
-z:sss
+#f:sss
+#z:sss
 ");
         var parser = new Parser(tokens);
 
@@ -149,13 +149,13 @@ z:sss
 
     [Fact]
     public void FunctionDefinitionWithArguments() {
-        var tokens = Lexer.tokenize("f(A,B):ssAB");
+        var tokens = Lexer.tokenize("#f(A,B):ssAB");
         var parser = new Parser(tokens);
 
         F_DefinitionNode definition = parser.parseFunctionDefinition();
 
         Assert.Equal("f", definition.name);
-        Assert.Equal(1, definition.column);
+        Assert.Equal(2, definition.column);
         Assert.Equal(1, definition.line);
 
         Assert.Equal(2, definition.parameters.Count);
@@ -165,7 +165,7 @@ z:sss
 
     [Fact]
     public void FunctionDefinitionWithArgumentsDuplicated() {
-        var tokens = Lexer.tokenize("f( A, A ):ssAA");
+        var tokens = Lexer.tokenize("#f( A, A ):ssAA");
         var parser = new Parser(tokens);
 
         Assert.Throws<LanguageError>(() => parser.parseFunctionDefinition());
@@ -199,9 +199,8 @@ lll
     [Fact]
     public void Program() {
         var tokens = Lexer.tokenize(@"
-f:sss
-sss
-lll
+#f(A):A
+f(s)lllss
 ");
         var parser = new Parser(tokens);
         var programNode = parser.parseProgram();
@@ -210,6 +209,6 @@ lll
 
         Assert.Equal(1, programNode.f_definitions.Count);
         Assert.Equal(6, programNode.code.steps.Count);
-
     }
+
 }

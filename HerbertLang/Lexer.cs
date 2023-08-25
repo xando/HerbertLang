@@ -37,7 +37,8 @@ namespace HerbertLang {
             {"STEP", new Regex(@"^(s|l|r)")},
             {"NUMBER", new Regex(@"^[0-9]+")},
             {"PARAMETER", new Regex(@"^[A-Z]")},
-            {"FUNCTION", new Regex(@"^(a|b|c|d|e|f|g|h|i|j|k|m|n|o|p|q|t|u|v|w|x|y|z)")}
+            {"#", new Regex(@"^#")},
+            {"FUNCTION", new Regex(@"^(a|b|c|d|e|f|g|h|i|j|k|m|n|o|p|q|t|u|v|w|x|y|z)")},
         };
 
         public static List<Token> tokenize(string code) {

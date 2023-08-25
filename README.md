@@ -39,25 +39,21 @@ SOLVER (code, world) -> solution
 
 ```python
 
-   # simple 
+   - simple code
    sss
 
-   # function no args
-   f:sss
+   - function no args
+   #f:sss
    f
 
-   f():sss
+   #f():sss
    f()
 
-   # function step args
-   f(A):A
+   - functions with args
+   #f(A):A
    f(sss)
 
    f(B):aBa
    f(sss)
-
-   # function deep args
-   f:f=@
-   f=0
 
 ```
