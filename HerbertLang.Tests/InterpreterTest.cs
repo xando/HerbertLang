@@ -9,65 +9,65 @@ public class TestInterpreter {
 
     [Fact]
     public void TestEmpty() {
-        Assert.Equal("", Interpreter.evalToString(""));
+        Assert.Equal("", Interpreter.evalToString("").code);
     }
 
 
     [Fact]
     public void TestCode() {
-        Assert.Equal("srl", Interpreter.evalToString("srl"));
+        Assert.Equal("srl", Interpreter.evalToString("srl").code);
     }
 
     [Fact]
     public void TestCodeMultipleLinies() {
 
-        var code = @"
+        var input = @"
 rr
 lsr
 ";
         Assert.Equal(
             "rrlsr",
-            Interpreter.evalToString(code)
+            Interpreter.evalToString(input).code
         );
     }
 
     [Fact]
     public void TestFunctionDefintion() {
-        var code = @"
+        var input = @"
 #f:s
 rrrf
 lllf
 ";
 
-        Assert.Equal("rrrsllls", Interpreter.evalToString(code));
+        Assert.Equal("rrrsllls", Interpreter.evalToString(input).code);
     }
 
 [Fact]
     public void TestMultipleFunctions() {
-        var code = @"
+        var input = @"
 #z:s
 #f:sz
 rrrf
 lllf
 ";
 
-        Assert.Equal("rrrsslllss", Interpreter.evalToString(code));
+        Assert.Equal("rrrsslllss", Interpreter.evalToString(input).code);
     }
 
     [Fact]
     public void TestUndefinedError() {
-        var code = "fss";
+        var input = "fss";
 
-        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(code));
+        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(input).error);
     }
 
     [Fact]
     public void TestFunctionWithParameters() {
-        var code = @"
+        var input = @"
 #f(A):A
 f(s)
 ";
-        Assert.Equal("s", Interpreter.evalToString(code));
+        Assert.Equal("s", Interpreter.evalToString(input).code);
     }
 
 }

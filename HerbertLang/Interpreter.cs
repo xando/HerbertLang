@@ -27,7 +27,11 @@ public static class Interpreter {
         return new string(steps.ToArray());
     }
 
-    public static string evalToString(string programText) {
+    public static (string code, string error) evalToString(string programText) {
+
+        string code = "";
+        string error = "";
+        
         try {
             var codeNode = Interpreter.eval(programText);
 
@@ -37,10 +41,12 @@ public static class Interpreter {
                 steps.Append(stepNode.step);
             }
 
-            return steps.ToString();
+            code = steps.ToString();
 
         } catch (LanguageError ex) {
-            return ex.ToString();
+            error = ex.ToString();
         }
+
+        return (code, error);
     }
 }

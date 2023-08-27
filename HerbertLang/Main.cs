@@ -18,8 +18,12 @@ public class Herbert {
         var inputCode = File.ReadAllText(filePath);
         var outputCode = Interpreter.evalToString(inputCode);
 
-        Console.WriteLine(outputCode);
+        Console.WriteLine(outputCode.code);
+        Console.Error.WriteLine(outputCode.error);
 
+        if (outputCode.error != "") {
+            return -1;
+        }
         return 0;
     }
 }
