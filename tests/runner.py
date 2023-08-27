@@ -2,6 +2,8 @@ import os
 import argparse
 import subprocess
 import glob
+# from timeit import default_timer as timer
+import timeit
 
 
 TEST_CODE_FILE = "in.h"
@@ -35,5 +37,9 @@ def main():
 
         print(f"{test_name} ->", '\033[92mPASSED' if expected_output == current_output else '\033[91mFAILED', '\033[0m')
 
+
 if __name__ == "__main__":
+    start_time = timeit.default_timer()
     main()
+    print(f"\nExeuction time: {(timeit.default_timer() - start_time):.4} seconds\n")
+    
