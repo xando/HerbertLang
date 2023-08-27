@@ -18,8 +18,13 @@ def main():
 
     args = parser.parse_args()
 
-    for test_input_code_file in sorted(glob.glob(os.path.join(args.tests, "*", TEST_CODE_FILE))):
+    tests = sorted(glob.glob(os.path.join(args.tests, "*", TEST_CODE_FILE)))
 
+    print(f"\nFound {len(tests)} in '{args.tests}' location.\n")
+
+    for test_input_code_file in tests:
+
+        test_dir = os.path.abspath(os.path.dirname(test_input_code_file))
         test_name = os.path.basename(os.path.dirname(test_input_code_file))
 
         result = subprocess.run(
@@ -29,10 +34,10 @@ def main():
         )
 
         if result.returncode == 0:
-            expected_output = open(os.path.join(test_name, TEST_STDOUT_FILE)).read()
+            expected_output = open(os.path.join(test_dir, TEST_STDOUT_FILE)).read()
             current_output = result.stdout.strip()
         else:
-            expected_output = open(os.path.join(test_name, TEST_STDERR_FILE)).read()
+            expected_output = open(os.path.join(test_dir, TEST_STDERR_FILE)).read()
             current_output = result.stderr.strip()
 
         print(f"{test_name} ->", '\033[92mPASSED' if expected_output == current_output else '\033[91mFAILED', '\033[0m')
