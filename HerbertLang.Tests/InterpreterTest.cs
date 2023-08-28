@@ -9,13 +9,13 @@ public class TestInterpreter {
 
     [Fact]
     public void TestEmpty() {
-        Assert.Equal("", Interpreter.evalToString("").code);
+        Assert.Equal("", Interpreter.eval("").code);
     }
 
 
     [Fact]
     public void TestCode() {
-        Assert.Equal("srl", Interpreter.evalToString("srl").code);
+        Assert.Equal("srl", Interpreter.eval("srl").code);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ lsr
 ";
         Assert.Equal(
             "rrlsr",
-            Interpreter.evalToString(input).code
+            Interpreter.eval(input).code
         );
     }
 
@@ -39,7 +39,7 @@ rrrf
 lllf
 ";
 
-        Assert.Equal("rrrsllls", Interpreter.evalToString(input).code);
+        Assert.Equal("rrrsllls", Interpreter.eval(input).code);
     }
 
 [Fact]
@@ -51,14 +51,14 @@ rrrf
 lllf
 ";
 
-        Assert.Equal("rrrsslllss", Interpreter.evalToString(input).code);
+        Assert.Equal("rrrsslllss", Interpreter.eval(input).code);
     }
 
     [Fact]
     public void TestUndefinedError() {
         var input = "fss";
 
-        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.evalToString(input).error);
+        Assert.Equal("1:1 Function 'f' is undefined.", Interpreter.eval(input).error);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ lllf
 #f(A):A
 f(s)
 ";
-        Assert.Equal("s", Interpreter.evalToString(input).code);
+        Assert.Equal("s", Interpreter.eval(input).code);
     }
 
 }

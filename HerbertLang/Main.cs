@@ -16,7 +16,7 @@ public class Herbert {
         }
 
         var inputCode = File.ReadAllText(filePath);
-        var outputCode = Interpreter.evalToString(inputCode);
+        var outputCode = Interpreter.eval(inputCode);
 
         Console.WriteLine(outputCode.code);
         Console.Error.WriteLine(outputCode.error);

@@ -1,62 +1,119 @@
-// using Xunit;
-// using System;
-// using HerbertLang;
+using Xunit;
 
 
-// namespace HerbertLang.Tests {
+namespace HerbertLang.Tests;
 
-//     public class SolverTest {
+public class SolverTest {
 
-//         [Fact]
-//         public void solve_1() {
+    [Fact]
+    public void TestFindPlayer() {
 
-//             string[,] world = {
-//                 {Tile.OBSTACLE, Tile.ITEM,      Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.SPACE,     Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
-//             };
+        string[,] map = {
+            {"#", "+", "#"},
+            {"#", "_", "#"},
+            {"#", "⇧", "#"},
+        };
 
-//             var solution = Solver.Solve("sss", world);
+        var world = new World(map);
+        Assert.Equal(0, world.player.direction);        
+        Assert.Equal(1, world.player.position.x);        
+        Assert.Equal(2, world.player.position.y);
+    }
 
-//             Assert.Equal(3, solution.steps.Length);
+    [Fact]
+    public void MoveForward() {
+        string[,] map = {
+            {"#", "+", "#"},
+            {"#", "_", "#"},
+            {"#", "⇧", "#"},
+        };
 
-//             Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
-//             Assert.Equal(Step.STEP_FORWARD, solution.steps[1]);
-//             Assert.Equal(Step.STEP_BAD, solution.steps[2]);
-//             Assert.True(solution.success);
-//         }
+        var world = new World(map);
+        Assert.True(world.movePlayerForward());
+        Assert.True(world.movePlayerForward());
+        Assert.False(world.movePlayerForward());
+    }
 
-//         [Fact]
-//         public void solve_2() {
-//             string[,] world = {
-//                 {Tile.OBSTACLE, Tile.ITEM,      Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.SPACE,     Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.PLAYER_DOWN, Tile.OBSTACLE}
-//             };
 
-//             var solution = Solver.Solve("s", world);
+    [Fact]
+    public void solve_1() {
 
-//             Assert.Single(solution.steps);
+        string[,] world = {
+            {"#", "★", "#"},
+            {"#", "_", "#"},
+            {"#", "⇧", "#"},
+        };
 
-//             Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
-//             Assert.False(solution.success);
-//         }
+        var solution = Solver.Solve("ss", world);
 
-//         [Fact]
-//         public void solve_3() {
-//             string[,] world = {
-//                 {Tile.OBSTACLE, Tile.ITEM,        Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.SPACE,       Tile.OBSTACLE},
-//                 {Tile.OBSTACLE, Tile.PLAYER_UP, Tile.OBSTACLE}
-//             };
+        Assert.Equal(2, solution.steps.Length);
 
-//             var solution = Solver.Solve("s", world);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[1]);
+        
+        Assert.True(solution.success);
+    }
 
-//             Assert.Equal(1, solution.steps.Length);
+    [Fact]
+    public void solve_2() {
 
-//             Assert.Equal(Step.STEP_BAD, solution.steps[0]);
-//             Assert.False(solution.success);
-//         }
+        string[,] world = {
+            {"#", "★", "#"},
+            {"#", "_", "#"},
+            {"#", "⇩", "#"},
+        };
 
-//     }
-// }
+        var solution = Solver.Solve("rrss", world);
+
+        Assert.Equal(4, solution.steps.Length);
+
+        Assert.Equal(Step.TURN_RIGHT, solution.steps[0]);
+        Assert.Equal(Step.TURN_RIGHT, solution.steps[1]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[2]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[3]);
+        
+        Assert.True(solution.success);
+    }
+
+    [Fact]
+    public void solve_3() {
+
+        string[,] world = {
+            {"#", "#", "★"},
+            {" ", " ", " "},
+            {"⇧", "#", "#"},
+        };
+
+        var solution = Solver.Solve("srssls", world);
+
+        Assert.Equal(6, solution.steps.Length);
+
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[0]);
+        Assert.Equal(Step.TURN_RIGHT,   solution.steps[1]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[2]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[3]);
+        Assert.Equal(Step.TURN_LEFT,    solution.steps[4]);
+        Assert.Equal(Step.STEP_FORWARD, solution.steps[5]);
+        
+        Assert.True(solution.success);
+    }
+
+    [Fact]
+    public void solveFail() {
+
+        string[,] world = {
+            {"#", "★", "#"},
+            {"#", "_", "#"},
+            {"#", "⇩", "#"},
+        };
+
+        var solution = Solver.Solve("ss", world);
+
+        Assert.Equal(2, solution.steps.Length);
+
+        Assert.Equal(Step.STEP_BAD, solution.steps[0]);
+        Assert.Equal(Step.STEP_BAD, solution.steps[1]);
+        
+        Assert.False(solution.success);
+    }
+}

@@ -142,7 +142,7 @@ public class ParserTest {
 
         var programNode = parser.parseProgram();
 
-        Assert.Equal(programNode.f_definitions.Count, 2);
+        Assert.Equal(2, programNode.f_definitions.Count);
         Assert.True(programNode.f_definitions.ContainsKey("f"));
         Assert.True(programNode.f_definitions.ContainsKey("z"));
     }
