@@ -2,7 +2,6 @@ import os
 import argparse
 import subprocess
 import glob
-# from timeit import default_timer as timer
 import timeit
 
 
@@ -18,9 +17,11 @@ def main():
 
     args = parser.parse_args()
 
-    tests = sorted(glob.glob(os.path.join(args.tests, "*", TEST_CODE_FILE)))
+    tests_location = os.path.abspath(args.tests)
 
-    print(f"\nFound {len(tests)} in '{args.tests}' location.\n")
+    tests = sorted(glob.glob(os.path.join(tests_location, "*", TEST_CODE_FILE)))
+
+    print(f"\nFound {len(tests)} tests in '{tests_location}' location.\n")
 
     for test_input_code_file in tests:
 
@@ -46,5 +47,5 @@ def main():
 if __name__ == "__main__":
     start_time = timeit.default_timer()
     main()
-    print(f"\nExeuction time: {(timeit.default_timer() - start_time):.4} seconds\n")
+    print(f"\nExeuction time: {(timeit.default_timer() - start_time):.4} seconds.\n")
     
